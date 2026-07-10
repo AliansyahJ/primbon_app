@@ -169,7 +169,9 @@ Ditunda: Notifikasi harian, Deployment.
 - [x] Konfigurasi `eas.json` (development, preview APK, production AAB)
 - [x] Hermes + ProGuard di `app.json` untuk APK lebih kecil
 - [x] Hapus `@react-native-async-storage/async-storage` (tidak dipakai)
+- [x] GitHub Actions workflow build APK otomatis
 - [ ] Build APK via EAS Build: `npx eas-cli build -p android --profile preview`
+- [ ] Install NDK 27.1.12297006 via `sdkmanager` untuk build local
 - [ ] Deploy versi Web ke Vercel atau Netlify
 - [ ] (Opsional) Publish ke Google Play Store
 

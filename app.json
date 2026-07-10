@@ -28,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/icon-wayang.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "3926df7b-1add-4f64-b73c-483f9ba8f380"
+      }
     }
   }
 }
