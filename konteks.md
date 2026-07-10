@@ -165,3 +165,4 @@ npm run ios      # iOS
 - **Bug 4**: `KeyboardAvoidingView` behavior `'height'` di Android — ganti jadi `undefined` di 3 screen (Weton, Kecocokan, DewasaAyu)
 - **Build Config**: tambah Hermes + ProGuard di `app.json`, buat `eas.json`, hapus `@react-native-async-storage/async-storage` (tdk dipakai), ignore `.claude/` + `AGENTS.md` + `CLAUDE.md`
 - **GitHub Actions**: workflow `.github/workflows/build.yml` — build APK otomatis tiap push ke master, APX bisa didownload dari Actions tab
+- **Fix CI**: hapus `package-lock.json` dari repo (regenerate via `npm install` di CI), hapus `cache: npm` karena lock file bermasalah dengan `expo-dev-client`
