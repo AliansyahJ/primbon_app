@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -144,8 +144,10 @@ const getStyles = (colors) => StyleSheet.create({
   },
   tabBar: {
     flexDirection: 'row',
-    height: 70,
-    paddingBottom: 10,
+    // Ruang ekstra bawah agar tidak bertabrakan dengan navigasi sistem
+    // (gesture bar / tombol navigasi Android). SafeAreaView menangani iOS notch.
+    height: Platform.OS === 'android' ? 88 : 70,
+    paddingBottom: Platform.OS === 'android' ? 28 : 10,
     paddingTop: 10,
   },
   tabItem: {

@@ -17,6 +17,9 @@ export const PRANATA_MANGSA = [
     startMonth: 6, startDay: 22,
     ciri: 'Puncak kemarau, daun berguguran, petani mulai menanam palawija.',
     deskripsi: 'Mangsa pertama. Musim kemarau memuncak, tanah kering merekah. Daun-daun berjatuhan (rontok). Waktu petani membakar jerami dan menanam palawija di lahan kering.',
+    watak: 'Mandiri dan pekerja keras yang tak takut memulai dari nol. Berani melepas yang lama untuk menanam benih baru, meski kerap terlihat dingin di luar.',
+    keberuntungan: 'Rezeki mengalir dari kerja keras dan awal-awal usaha yang berani.',
+    elemen: 'Api (Kemarau)',
   },
   {
     no: 2,
@@ -27,6 +30,9 @@ export const PRANATA_MANGSA = [
     startMonth: 8, startDay: 2,
     ciri: 'Kemarau kering, tanah retak, pohon randu dan mangga mulai berbunga.',
     deskripsi: 'Mangsa kedua. Kemarau makin kering, tanah pecah-pecah. Pohon randu (kapuk) dan mangga mulai berbunga. Udara panas di siang, dingin di malam.',
+    watak: 'Tabah dan tahan banting, mampu bertahan dalam keadaan sulit tanpa mengeluh. Sabar menunggu waktu berbunga seperti randu yang mekar di tengah kering.',
+    keberuntungan: 'Rezeki datang bagi yang sabar bertahan hingga masa panen tiba.',
+    elemen: 'Bumi (Kemarau)',
   },
   {
     no: 3,
@@ -37,6 +43,9 @@ export const PRANATA_MANGSA = [
     startMonth: 8, startDay: 25,
     ciri: 'Kemarau paling kering, sumber air menyusut, palawija dipanen.',
     deskripsi: 'Mangsa ketiga (Katelu). Puncak kekeringan, sumur dan sungai menyusut. Waktu panen palawija. Banyak tanaman meranggas menahan kering.',
+    watak: 'Hemat, cermat, dan pandai mengelola sumber daya yang terbatas. Tangguh di masa paceklik dan tahu benar cara menyimpan untuk hari sulit.',
+    keberuntungan: 'Rezeki terjaga lewat kehematan dan kepandaian mengatur simpanan.',
+    elemen: 'Bumi (Kemarau)',
   },
   {
     no: 4,
@@ -47,6 +56,9 @@ export const PRANATA_MANGSA = [
     startMonth: 9, startDay: 18,
     ciri: 'Peralihan ke hujan, burung manyar bersarang, mata air mulai mengalir.',
     deskripsi: 'Mangsa keempat. Awal peralihan menuju penghujan. Burung manyar membuat sarang, sumber air mulai hidup kembali. Pohon-pohon bersemi.',
+    watak: 'Telaten dan penuh harapan, pandai membangun rumah tangga seperti manyar merajut sarang. Penuh persiapan dan menyambut perubahan dengan optimis.',
+    keberuntungan: 'Rezeki tumbuh dari ketelatenan menata dan membangun sesuatu yang baru.',
+    elemen: 'Angin (Peralihan)',
   },
   {
     no: 5,
@@ -57,6 +69,9 @@ export const PRANATA_MANGSA = [
     startMonth: 10, startDay: 13,
     ciri: 'Hujan pertama turun, pohon asam bersemi, ulat bermunculan.',
     deskripsi: 'Mangsa kelima. Hujan mulai turun membasahi bumi. Pohon asam bersemi muda, angin kencang, kilat menyambar. Petani menyiapkan sawah.',
+    watak: 'Bersemangat dan dinamis, penuh gairah menyambut awal yang baru seperti tunas asam yang muncul. Kadang bergejolak bak angin dan kilat, namun menyuburkan.',
+    keberuntungan: 'Rezeki datang saat berani menyiapkan diri sebelum peluang tiba.',
+    elemen: 'Air (Penghujan)',
   },
   {
     no: 6,
@@ -67,6 +82,9 @@ export const PRANATA_MANGSA = [
     startMonth: 11, startDay: 9,
     ciri: 'Musim hujan, banyak buah-buahan, petani mulai menggarap sawah.',
     deskripsi: 'Mangsa keenam. Musim penghujan mantap. Musim buah (rambutan, durian, manggis). Petani mulai membajak dan menyemai benih padi.',
+    watak: 'Murah hati dan berlimpah, senang berbagi hasil seperti musim buah yang ranum. Ramah, disukai banyak orang, dan pandai menikmati berkah hidup.',
+    keberuntungan: 'Rezeki melimpah dan mudah datang, terutama dari kemurahan berbagi.',
+    elemen: 'Air (Penghujan)',
   },
   {
     no: 7,
@@ -77,6 +95,9 @@ export const PRANATA_MANGSA = [
     startMonth: 12, startDay: 22,
     ciri: 'Puncak musim hujan, banjir, angin ribut, padi ditanam.',
     deskripsi: 'Mangsa ketujuh. Puncak penghujan, hujan deras terus-menerus, rawan banjir dan angin ribut. Padi mulai ditanam di sawah yang tergenang.',
+    watak: 'Berjiwa kuat dan berani menghadapi badai kehidupan tanpa gentar. Penuh energi meluap, tegas, namun perlu belajar menahan gejolak agar tak melampiaskan.',
+    keberuntungan: 'Rezeki diraih lewat keberanian bertahan di tengah tantangan besar.',
+    elemen: 'Air (Penghujan)',
   },
   {
     no: 8,
@@ -87,6 +108,9 @@ export const PRANATA_MANGSA = [
     startMonth: 2, startDay: 3,
     ciri: 'Hujan mulai reda, padi menghijau bunting, banyak hama.',
     deskripsi: 'Mangsa kedelapan. Hujan mulai berkurang. Padi tumbuh subur menghijau dan mulai bunting (mengandung bulir). Waspada serangan hama dan ulat.',
+    watak: 'Penyabar dan penuh pengharapan, telaten merawat sesuatu hingga matang seperti padi yang bunting. Waspada dan protektif terhadap apa yang dijaganya.',
+    keberuntungan: 'Rezeki menanti bagi yang sabar merawat dan menjaga hingga membuahkan hasil.',
+    elemen: 'Bumi (Peralihan)',
   },
   {
     no: 9,
@@ -97,6 +121,9 @@ export const PRANATA_MANGSA = [
     startMonth: 3, startDay: 1,
     ciri: 'Padi menguning berbulir, jangkrik dan gareng mengerik.',
     deskripsi: 'Mangsa kesembilan. Padi berbulir dan mulai menguning. Suara jangkrik dan tonggeret ramai. Bunga-bunga bermekaran. Menjelang panen.',
+    watak: 'Ceria, ekspresif, dan penuh warna seperti bunga yang bermekaran. Ramai dan menyenangkan dalam pergaulan, membawa suasana hidup di sekelilingnya.',
+    keberuntungan: 'Rezeki mendekat menjelang keberhasilan, buah dari usaha yang hampir matang.',
+    elemen: 'Angin (Peralihan)',
   },
   {
     no: 10,
@@ -107,6 +134,9 @@ export const PRANATA_MANGSA = [
     startMonth: 3, startDay: 26,
     ciri: 'Panen raya padi, udara mulai kering, burung kembali bersarang.',
     deskripsi: 'Mangsa kesepuluh. Panen raya padi tiba. Udara berangsur kering, hujan jarang. Burung-burung membuat sarang kembali. Masa penuh syukur.',
+    watak: 'Pandai bersyukur dan menikmati hasil kerja, matang dan berkecukupan. Suka menuai buah usahanya dan berbagi kebahagiaan panen dengan sekitar.',
+    keberuntungan: 'Rezeki berlimpah sebagai buah kerja keras yang telah tuntas dituai.',
+    elemen: 'Bumi (Peralihan)',
   },
   {
     no: 11,
@@ -117,6 +147,9 @@ export const PRANATA_MANGSA = [
     startMonth: 4, startDay: 19,
     ciri: 'Awal kemarau, hasil panen dijemur, sawah mulai kering.',
     deskripsi: 'Mangsa kesebelas (Dhesta). Awal musim kemarau. Petani menjemur dan menyimpan hasil panen. Sawah mulai mengering. Burung menyuapi anak-anaknya.',
+    watak: 'Penyayang dan penuh tanggung jawab, rela berkorban demi keluarga seperti induk burung menyuapi anaknya. Rajin menyimpan dan berpikir untuk hari depan.',
+    keberuntungan: 'Rezeki terjaga bagi yang tekun menyimpan dan mengasuh dengan kasih.',
+    elemen: 'Api (Peralihan)',
   },
   {
     no: 12,
@@ -127,5 +160,8 @@ export const PRANATA_MANGSA = [
     startMonth: 5, startDay: 12,
     ciri: 'Kemarau menguat, udara dingin, air menyusut, akhir siklus.',
     deskripsi: 'Mangsa terakhir. Kemarau menguat, udara dingin terutama malam (bediding). Air menyusut. Akhir siklus sebelum kembali ke Kasa.',
+    watak: 'Tenang, reflektif, dan bijak menerima akhir sebuah siklus. Mampu menahan diri dalam dingin dan keterbatasan, penuh perhitungan sebelum memulai lagi.',
+    keberuntungan: 'Rezeki datang dari kesabaran menutup satu babak dan menyiapkan awal baru.',
+    elemen: 'Angin (Kemarau)',
   },
 ];

@@ -2,6 +2,8 @@
 import { BULAN_JAWA, WINDU_NAMES, DEWASA_AYU_INFO, PERUNTUNGAN_INFO } from '../data/primbonData';
 import { WUKU_DATA } from '../data/wukuData';
 import { PRANATA_MANGSA } from '../data/mangsaData';
+import { WATAK_WETON } from '../data/watakWetonData';
+import { PANCASUDA_INFO } from '../data/pancasudaData';
 
 const isLeapYear = (year) => (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 
@@ -193,6 +195,28 @@ export const getWuku = (date) => {
     hariKe,
     ...WUKU_DATA[index],
   };
+};
+
+/**
+ * Watak 35 Weton — ramalan karakter berdasar kombinasi Dina × Pasaran
+ * @param {Date} date
+ * @returns {Object|null} data watak weton atau null bila tidak ditemukan
+ */
+export const getWatakWeton = (date) => {
+  const { weton } = getJavaneseDate(date);
+  return WATAK_WETON[weton] || null;
+};
+
+/**
+ * Pancasuda — ramalan nasib berdasar total neptu weton
+ * @param {Date} date
+ * @returns {Object} { index, ...PANCASUDA_INFO[index] }
+ */
+export const getPancasuda = (date) => {
+  const { totalNeptu } = getJavaneseDate(date);
+  // Hitung neptu melalui siklus 7 kategori Pancasuda
+  const index = ((totalNeptu - 1) % 7 + 7) % 7;
+  return { index, ...PANCASUDA_INFO[index] };
 };
 
 /**

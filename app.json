@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Kalender Jawa",
-    "slug": "kalender_jawa",
+    "name": "Primbon Jawa",
+    "slug": "primbon-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon-wayang.png",

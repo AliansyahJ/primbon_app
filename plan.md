@@ -165,6 +165,43 @@ Ditunda: Notifikasi harian, Deployment.
 
 ---
 
+#### ✅ Prioritas 5: Horoskop Jawa Lengkap + Rename + Fix UI (SELESAI)
+
+Semua ramalan berbasis tanggal lahir digabung di **WetonCalculatorScreen** (bukan tab baru,
+hindari 5 tab yang sesak). Muncul sebagai kartu tambahan setelah hasil weton.
+
+##### Fitur 11: Watak 35 Weton
+- [x] `src/data/watakWetonData.js`: `WATAK_WETON` — 35 entri key `"Dina Pasaran"` (7×5, terverifikasi)
+- [x] Tiap entri: watak, rejeki, jodoh, karier, kelebihan, kekurangan, saran
+- [x] `getWatakWeton(date)` di `javaneseLogic.js` — key dari `getJavaneseDate().weton`
+
+##### Fitur 12: Watak Kelahiran Wuku
+- [x] Perluas `WUKU_DATA` (30) tambah field: `bakat`, `keberuntungan`, `pantangan`, `pohon`, `burung`
+- [x] Reuse `getWuku(date)` — kartu "Wuku Lahir" di WetonCalculatorScreen
+
+##### Fitur 13: Pancasuda
+- [x] `src/data/pancasudaData.js`: `PANCASUDA_INFO` — 7 jenis (Wasesa Segara, Tunggak Semi,
+      Satria Wibawa, Sumur Sinaba, Satria Wirang, Bumi Kapetak, Lebu Katiup Angin)
+- [x] Tiap entri: nama, ikon, makna, watak, nasib, saran, baik
+- [x] `getPancasuda(date)` di `javaneseLogic.js` — `(totalNeptu-1) % 7`
+
+##### Fitur 14: Zodiak Mangsa Lahir
+- [x] Perluas `PRANATA_MANGSA` (12) tambah field: `watak`, `keberuntungan`, `elemen`
+- [x] Reuse `getMangsa(date)` — kartu "Zodiak Mangsa"
+
+##### Fitur 15: Fix Tab Bar Tabrakan Navigasi Sistem
+- [x] `App.js`: tab bar Android height 88 + paddingBottom 28 (beri ruang gesture/nav bar); iOS tetap 70/10
+- [x] safe-area-context tak dipakai (install diblok policy) → pakai padding Platform-based
+
+##### Fitur 16: Rename Project → primbon-app
+- [x] `package.json` name → `primbon-app`
+- [x] `app.json` name → "Primbon Jawa", slug → `primbon-app`
+- [x] `android.package` DIBIARKAN (`com.anonymous.kalender_jawa`) — ganti = putus identitas EAS/app + kredensial
+- [ ] Rename folder `O:\Project\kalender_jawa` → `O:\Project\primbon-app` — MANUAL (shell tak bisa rename cwd sendiri):
+      tutup editor/terminal, jalankan di `O:\Project`: `mv kalender_jawa primbon-app`, buka ulang path baru
+
+---
+
 #### Deployment & Distribusi
 - [x] Konfigurasi `eas.json` (development, preview APK, production AAB)
 - [x] Hermes + ProGuard di `app.json` untuk APK lebih kecil
@@ -180,19 +217,28 @@ Ditunda: Notifikasi harian, Deployment.
 ## Struktur File Proyek
 ```
 kalender_jawa/
-├── App.js                          # Entry point + Tab Navigation
+├── App.js                          # Entry + ThemeProvider + tab bar (4 tab) + gate onboarding
 ├── index.js                        # Expo entry
-├── app.json                        # Konfigurasi Expo
+├── app.json                        # Konfigurasi Expo (splash, userInterfaceStyle automatic)
+├── eas.json                        # Profil EAS Build (dev, preview APK, production AAB)
 ├── package.json                    # Dependencies
+├── konteks.md                      # Overview proyek untuk AI agent
 ├── src/
 │   ├── screens/
-│   │   ├── CalendarScreen.js       # Layar Kalender Utama
-│   │   └── WetonCalculatorScreen.js # Layar Kalkulator Weton
+│   │   ├── CalendarScreen.js        # Tab 1: kalender + Hari Ini + detail tanggal
+│   │   ├── WetonCalculatorScreen.js # Tab 2: kalkulator weton
+│   │   ├── KecocokanScreen.js       # Tab 3: kecocokan jodoh (padangan)
+│   │   ├── DewasaAyuScreen.js       # Tab 4: pencari hari baik
+│   │   └── OnboardingScreen.js      # 3 slide tutorial (tampil sekali)
 │   ├── utils/
-│   │   └── javaneseLogic.js        # Algoritma perhitungan Jawa
+│   │   ├── javaneseLogic.js         # Semua algoritma perhitungan Jawa
+│   │   └── storage.js               # Persistensi (localStorage web / memory native)
 │   ├── data/
-│   │   └── primbonData.js          # Database Primbon (lokal)
+│   │   ├── primbonData.js           # Database Primbon
+│   │   ├── wukuData.js              # 30 wuku Pawukon
+│   │   └── mangsaData.js            # 12 Pranata Mangsa
 │   └── theme/
-│       └── theme.js                # Design System (warna, tipografi)
-└── assets/                         # Gambar, ikon, font
+│       ├── theme.js                 # darkColors + lightColors + typography
+│       └── ThemeContext.js          # Provider + useTheme() hook
+└── assets/                          # Gambar, ikon, splash
 ```

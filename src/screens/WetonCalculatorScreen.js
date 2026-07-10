@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Animated } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
-import { getJavaneseDate, isValidDate } from '../utils/javaneseLogic';
+import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, getMangsa } from '../utils/javaneseLogic';
 import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
@@ -35,6 +35,10 @@ export default function WetonCalculatorScreen() {
       ...javaneseData,
       insight,
       pasaranInfo,
+      watakWeton: getWatakWeton(inputDate),
+      pancasuda: getPancasuda(inputDate),
+      wukuLahir: getWuku(inputDate),
+      mangsaLahir: getMangsa(inputDate),
     });
 
     fadeAnim.setValue(0);
@@ -245,6 +249,124 @@ export default function WetonCalculatorScreen() {
                   )}
                 </BlurView>
               )}
+
+              {/* ===== HOROSKOP JAWA ===== */}
+              <View style={styles.horoskopDivider}>
+                <Text style={styles.horoskopDividerText}>✦ HOROSKOP JAWA ✦</Text>
+              </View>
+
+              {/* Kartu Watak Weton (35 Weton) */}
+              {result.watakWeton && (
+                <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>🔮</Text>
+                    <Text style={styles.sectionTitle}>Watak Weton {result.weton}</Text>
+                  </View>
+                  <Text style={styles.detailPhilosophy}>{result.watakWeton.watak}</Text>
+                  <View style={styles.horoGrid}>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>💰 Rejeki</Text>
+                      <Text style={styles.detailSubText}>{result.watakWeton.rejeki}</Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>❤️ Jodoh</Text>
+                      <Text style={styles.detailSubText}>{result.watakWeton.jodoh}</Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>💼 Karier</Text>
+                      <Text style={styles.detailSubText}>{result.watakWeton.karier}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.plusMinusRow}>
+                    <View style={styles.plusBox}>
+                      <Text style={styles.detailSubLabel}>Kelebihan</Text>
+                      <Text style={styles.detailSubText}>{result.watakWeton.kelebihan}</Text>
+                    </View>
+                    <View style={styles.minusBox}>
+                      <Text style={styles.detailSubLabel}>Kekurangan</Text>
+                      <Text style={styles.detailSubText}>{result.watakWeton.kekurangan}</Text>
+                    </View>
+                  </View>
+                  <View style={styles.saranBox}>
+                    <Ionicons name="bulb-outline" size={14} color={colors.secondary} />
+                    <Text style={styles.saranText}>{result.watakWeton.saran}</Text>
+                  </View>
+                </BlurView>
+              )}
+
+              {/* Kartu Pancasuda */}
+              {result.pancasuda && (
+                <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>{result.pancasuda.ikon}</Text>
+                    <Text style={styles.sectionTitle}>Pancasuda</Text>
+                  </View>
+                  <Text style={[styles.insightName, { color: result.pancasuda.baik ? colors.secondary : '#E67E22' }]}>
+                    {result.pancasuda.nama}
+                  </Text>
+                  <Text style={styles.insightSummary}>"{result.pancasuda.makna}"</Text>
+                  <View style={styles.insightDivider} />
+                  <Text style={styles.detailPhilosophy}>{result.pancasuda.watak}</Text>
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>Nasib</Text>
+                    <Text style={styles.detailSubText}>{result.pancasuda.nasib}</Text>
+                  </View>
+                  <View style={styles.saranBox}>
+                    <Ionicons name="bulb-outline" size={14} color={colors.secondary} />
+                    <Text style={styles.saranText}>{result.pancasuda.saran}</Text>
+                  </View>
+                </BlurView>
+              )}
+
+              {/* Kartu Wuku Lahir */}
+              {result.wukuLahir && (
+                <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>🗓️</Text>
+                    <Text style={styles.sectionTitle}>Wuku Lahir — {result.wukuLahir.nama}</Text>
+                  </View>
+                  <Text style={styles.wukuDewaText}>Pelindung: {result.wukuLahir.dewa}</Text>
+                  <Text style={styles.detailPhilosophy}>{result.wukuLahir.deskripsi}</Text>
+                  <View style={styles.horoGrid}>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>🎯 Bakat</Text>
+                      <Text style={styles.detailSubText}>{result.wukuLahir.bakat}</Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>🍀 Keberuntungan</Text>
+                      <Text style={styles.detailSubText}>{result.wukuLahir.keberuntungan}</Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>⛔ Pantangan</Text>
+                      <Text style={styles.detailSubText}>{result.wukuLahir.pantangan}</Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>🌳 Pohon / 🐦 Burung</Text>
+                      <Text style={styles.detailSubText}>{result.wukuLahir.pohon} · {result.wukuLahir.burung}</Text>
+                    </View>
+                  </View>
+                </BlurView>
+              )}
+
+              {/* Kartu Zodiak Mangsa */}
+              {result.mangsaLahir && (
+                <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>{result.mangsaLahir.ikon}</Text>
+                    <Text style={styles.sectionTitle}>Zodiak Mangsa — {result.mangsaLahir.nama}</Text>
+                  </View>
+                  <Text style={styles.wukuDewaText}>{result.mangsaLahir.rentang} · Elemen {result.mangsaLahir.elemen}</Text>
+                  <Text style={styles.detailPhilosophy}>{result.mangsaLahir.watak}</Text>
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>🍀 Keberuntungan</Text>
+                    <Text style={styles.detailSubText}>{result.mangsaLahir.keberuntungan}</Text>
+                  </View>
+                </BlurView>
+              )}
+
+              <Text style={styles.horoskopDisclaimer}>
+                * Horoskop Jawa adalah panduan tradisi primbon, bukan kepastian.
+              </Text>
 
             </Animated.View>
           )}
@@ -515,5 +637,78 @@ const getStyles = (colors) => StyleSheet.create({
     fontSize: 14,
     color: colors.primary,
     lineHeight: 22,
+  },
+
+  /* === Horoskop === */
+  horoskopDivider: {
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  horoskopDividerText: {
+    fontSize: 13,
+    fontWeight: '900',
+    color: colors.secondary,
+    letterSpacing: 3,
+  },
+  horoskopCard: {
+    backgroundColor: 'rgba(212, 175, 55, 0.05)',
+    borderColor: 'rgba(212, 175, 55, 0.25)',
+  },
+  horoGrid: {
+    marginTop: 4,
+  },
+  horoItem: {
+    marginTop: 10,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 12,
+    padding: 14,
+  },
+  plusMinusRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 10,
+  },
+  plusBox: {
+    flex: 1,
+    backgroundColor: 'rgba(120, 180, 120, 0.1)',
+    borderRadius: 12,
+    padding: 12,
+  },
+  minusBox: {
+    flex: 1,
+    backgroundColor: 'rgba(230, 126, 34, 0.1)',
+    borderRadius: 12,
+    padding: 12,
+  },
+  saranBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(212, 175, 55, 0.08)',
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 12,
+    gap: 8,
+  },
+  saranText: {
+    flex: 1,
+    fontSize: 13,
+    color: colors.primary,
+    lineHeight: 20,
+    fontStyle: 'italic',
+  },
+  wukuDewaText: {
+    fontSize: 12,
+    color: colors.textLight,
+    fontWeight: '600',
+    marginBottom: 10,
+    marginTop: -8,
+  },
+  horoskopDisclaimer: {
+    fontSize: 11,
+    color: colors.textLight,
+    textAlign: 'center',
+    marginTop: 8,
+    fontStyle: 'italic',
+    opacity: 0.7,
   },
 });

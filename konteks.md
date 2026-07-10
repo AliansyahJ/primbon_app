@@ -1,4 +1,7 @@
-# Konteks Proyek — Kalender Jawa
+# Konteks Proyek — Primbon Jawa (primbon-app)
+
+> Nama project: `primbon-app` (package.json) / display "Primbon Jawa" (app.json).
+> Folder repo masih `kalender_jawa` sampai di-rename manual (lihat plan.md Fitur 16).
 
 > File ini adalah **ringkasan menyeluruh** proyek untuk memudahkan AI agent (atau developer baru)
 > memahami aplikasi dengan cepat. Baca ini dulu sebelum mulai kerja.
@@ -28,8 +31,8 @@ jodoh, dan hari baik menurut tradisi Jawa.
 | UI | Glassmorphism: `expo-blur` (BlurView) + `expo-linear-gradient` + `Animated` API |
 | Ikon | `@expo/vector-icons` (Ionicons) |
 | Web | `react-native-web` |
-| State | React `useState`/`useRef` lokal per screen — tidak ada global store |
-| Persistensi | Tidak ada (semua stateless, dihitung on-the-fly) |
+| State | React `useState`/`useRef` lokal per screen + `ThemeContext` (global tema) |
+| Persistensi | `storage.js` — localStorage (web) / memory (native); simpan pilihan tema & flag onboarding |
 
 Belum ada: routing library, testing, TypeScript, linter config.
 
@@ -39,23 +42,29 @@ Belum ada: routing library, testing, TypeScript, linter config.
 
 ```
 kalender_jawa/
-├── App.js                      # Entry + custom bottom tab bar (4 tab)
+├── App.js                      # Entry + ThemeProvider + custom tab bar (4 tab) + gate onboarding
 ├── plan.md                     # Roadmap & status fitur (SELALU update saat kerja)
 ├── konteks.md                  # File ini
 ├── AGENTS.md / CLAUDE.md       # Instruksi: baca docs Expo v57 sebelum coding
 ├── src/
 │   ├── screens/
-│   │   ├── CalendarScreen.js       # Tab 1: kalender bulanan + kartu Hari Ini + detail tanggal
+│   │   ├── CalendarScreen.js        # Tab 1: kalender bulanan + kartu Hari Ini + detail tanggal
 │   │   ├── WetonCalculatorScreen.js # Tab 2: input tgl lahir → weton, neptu, watak, unsur/arah/warna
 │   │   ├── KecocokanScreen.js       # Tab 3: 2 tgl lahir → padangan (kecocokan jodoh)
-│   │   └── DewasaAyuScreen.js       # Tab 4: cari hari baik per jenis acara
+│   │   ├── DewasaAyuScreen.js       # Tab 4: cari hari baik per jenis acara
+│   │   └── OnboardingScreen.js      # 3 slide tutorial (tampil sekali, flag di storage)
 │   ├── utils/
-│   │   └── javaneseLogic.js    # SEMUA algoritma perhitungan (murni, tanpa UI)
+│   │   ├── javaneseLogic.js    # SEMUA algoritma perhitungan (murni, tanpa UI)
+│   │   └── storage.js          # Wrapper persistensi (localStorage web / memory native)
 │   ├── data/
 │   │   ├── primbonData.js      # Database primbon (objek/array export)
-│   │   └── wukuData.js         # 30 wuku Pawukon
+│   │   ├── wukuData.js         # 30 wuku Pawukon
+│   │   ├── mangsaData.js       # 12 Pranata Mangsa (musim tani + zodiak)
+│   │   ├── watakWetonData.js   # 35 watak weton (horoskop)
+│   │   └── pancasudaData.js    # 7 pancasuda (ramalan nasib)
 │   └── theme/
-│       └── theme.js            # colors + typography (design tokens)
+│       ├── theme.js            # darkColors + lightColors + typography (design tokens)
+│       └── ThemeContext.js     # Provider + useTheme() hook (mode, colors, toggleMode)
 └── assets/                     # Gambar, ikon
 ```
 
@@ -79,6 +88,9 @@ Screen meng-import fungsi dari utils dan data dari data. Jangan taruh angka/logi
 | **Dewasa Ayu** | Pencarian hari baik per jenis acara | `findGoodDays()` |
 | **Bulan/Tahun Jawa** | Konversi ke kalender Hijriah-Jawa + siklus Windu | `getJavaneseCalendar()` |
 | **Wuku** | Siklus Pawukon 210 hari (30 wuku × 7 hari) | `getWuku()` |
+| **Watak 35 Weton** | Ramalan karakter per kombinasi Dina×Pasaran (35) | `getWatakWeton()` |
+| **Pancasuda** | Ramalan nasib dari total neptu (7 jenis) | `getPancasuda()` |
+| **Pranata Mangsa** | Musim tani + zodiak mangsa lahir (12) | `getMangsa()` |
 
 ---
 
@@ -91,6 +103,10 @@ Screen meng-import fungsi dari utils dan data dari data. Jangan taruh angka/logi
 - `calculatePadangan(date1, date2)` → `{ sisa, totalNeptu, neptuPria, neptuWanita, wetonPria, wetonWanita }`
 - `findGoodDays(startDate, endDate, eventKey, userDate?)` → array hari baik terurut skor
 - `getWuku(date)` → `{ index, urutan, hariKe, nama, dewa, watak, deskripsi }`
+- `getMangsa(date)` → data mangsa aktif dari `PRANATA_MANGSA` (nama, no, rentang, ciri, deskripsi, watak, elemen)
+- `getWatakWeton(date)` → entri `WATAK_WETON[weton]` (watak, rejeki, jodoh, karier, kelebihan, kekurangan, saran) atau null
+- `getPancasuda(date)` → `{ index, ...PANCASUDA_INFO[i] }` dari `(totalNeptu-1)%7`
+- `isValidDate(year, month, day)` → boolean; tolak kombinasi mustahil (mis. 30 Feb). Dipakai semua form input.
 
 **Titik referensi perhitungan (JANGAN diubah tanpa verifikasi):**
 - Pasaran: 1 Jan 1970 (epoch) = Wage. Modulo 5 dari hari sejak epoch.
@@ -103,22 +119,32 @@ Screen meng-import fungsi dari utils dan data dari data. Jangan taruh angka/logi
 ## 6. Data `primbonData.js` (yang diexport)
 
 `UNSUR_INFO`, `ARAH_INFO`, `WARNA_INFO`, `PASARAN_INFO`, `neptuWatak`, `getPrimbonInsight(neptu)`,
-`BULAN_JAWA` (array 12), `WINDU_NAMES` (array 8), `PERUNTUNGAN_INFO` (7 entri, key 0–6),
+`BULAN_JAWA` (array 12), `WINDU_NAMES` (array 8), `PERUNTUNGAN_INFO` (7 entri, key 0–6 — tiap entri punya `skor` + `baik`),
 `PADANGAN_INFO` (9 entri, key 0–8), `DEWASA_AYU_INFO` (5 jenis acara).
 
-`wukuData.js` → `WUKU_DATA` (array 30, urut Sinta→Watugunung).
+`wukuData.js` → `WUKU_DATA` (array 30, urut Sinta→Watugunung; + bakat/keberuntungan/pantangan/pohon/burung).
+`mangsaData.js` → `PRANATA_MANGSA` (array 12, Kasa→Sadha; + watak/keberuntungan/elemen).
+`watakWetonData.js` → `WATAK_WETON` (35 entri, key `"Dina Pasaran"`).
+`pancasudaData.js` → `PANCASUDA_INFO` (array 7).
+
+Horoskop Jawa (watak weton, wuku lahir, pancasuda, zodiak mangsa) tampil sebagai kartu
+tambahan di **WetonCalculatorScreen** setelah hasil weton — bukan tab terpisah.
 
 ---
 
 ## 7. Konvensi UI / Styling
 
-- **Tema:** Dark Royal Javanese. Warna di `theme.js`: `secondary` = emas (#D4AF37), `primary` = krem,
-  `text` = off-white, background gradient coklat gelap.
-- **Kartu:** `BlurView` (glassmorphism) + border tipis + `borderRadius` besar (18–24).
+- **Tema:** dua palet — `darkColors` (default, Dark Royal Javanese) + `lightColors`. Toggle via `useTheme()`.
+  `secondary` = emas, `primary` = krem/coklat, `blurTint` ikut mode. Semua warna dari `colors` hasil `useTheme()`.
+- **Pola styling wajib:** tiap screen ambil `const { colors } = useTheme()`, lalu
+  `const styles = useMemo(() => getStyles(colors), [colors])`. Styles didefinisikan sebagai
+  factory `const getStyles = (colors) => StyleSheet.create({...})` — BUKAN StyleSheet statis (agar ikut ganti tema).
+- **Kartu:** `BlurView` (glassmorphism), `tint={colors.blurTint}`, bg `colors.cardBg`, border `colors.cardBorder`.
 - **Animasi:** fade + slide-up pakai `Animated` (`useNativeDriver: true`).
 - **Layout:** `centerWrapper` maxWidth 500 agar rapi di web/tablet.
-- **StyleSheet** per screen (tidak ada style global selain theme tokens).
 - Setiap screen ikuti pola kartu yang sama — tiru screen existing saat buat yang baru.
+- **Komponen helper di luar komponen utama** (mis. `DateInput` di KecocokanScreen) harus terima
+  `styles` DAN `colors` sebagai prop — tidak ada akses scope useTheme di sana.
 
 ---
 
@@ -152,7 +178,9 @@ npm run ios      # iOS
 - Konten ramalan/primbon bersifat **panduan tradisi**, bukan kepastian — beri disclaimer di UI (lihat DewasaAyuScreen).
 - Belum ada test — verifikasi manual via `npm start` dan cek konsistensi hasil (mis. peruntungan hari ini
   di kartu Hari Ini harus sama dengan di detail card).
-- Roadmap tersisa (P4): Splash screen, Onboarding, Dark/Light toggle, Notifikasi harian, Pranata Mangsa, Deployment.
+- **Status roadmap:** P1–P5 SELESAI (Kalender, Weton, Kecocokan, Peruntungan, Bulan/Tahun Jawa,
+  Dewasa Ayu, Wuku, Pranata Mangsa, Dark/Light toggle, Splash + Onboarding, Horoskop Jawa lengkap). Bugfix batch 1 selesai.
+- **Sisa:** Notifikasi harian (butuh `expo-notifications`), build APK via EAS, deploy web, rename folder manual. Detail di `plan.md`.
 
 ---
 
@@ -167,4 +195,14 @@ npm run ios      # iOS
 - **GitHub Actions**: workflow `.github/workflows/build.yml` — build APK otomatis tiap push ke master, APX bisa didownload dari Actions tab
 - **Fix CI**: hapus `package-lock.json` dari repo (regenerate via `npm install` di CI), hapus `cache: npm` karena lock file bermasalah dengan `expo-dev-client`
 - **APK size**: build hanya `arm64-v8a` + `shrinkResources` → APK turun dari ~32MB ke ~12-15MB
+
+### 11 Jul 2026 — Horoskop Jawa Lengkap + Rename
+- **Horoskop (P5)**: 4 sistem ramalan berbasis tanggal lahir digabung di WetonCalculatorScreen sebagai kartu:
+  - Watak 35 Weton (`watakWetonData.js` → `WATAK_WETON`, `getWatakWeton()`)
+  - Wuku Lahir (perluas `WUKU_DATA`: bakat/keberuntungan/pantangan/pohon/burung)
+  - Pancasuda (`pancasudaData.js` → `PANCASUDA_INFO` 7 jenis, `getPancasuda()`)
+  - Zodiak Mangsa (perluas `PRANATA_MANGSA`: watak/keberuntungan/elemen)
+- **Fix UI**: tab bar Android height 88 + paddingBottom 28 agar tak bertabrakan navigasi sistem (safe-area-context tak dipakai, install diblok)
+- **Rename**: `package.json` name → `primbon-app`, `app.json` name "Primbon Jawa" + slug `primbon-app`.
+  `android.package` DIBIARKAN (ganti = putus EAS). Folder repo rename manual (belum).
 - **Workflow final**: `npm install --legacy-peer-deps --ignore-scripts --no-package-lock`, gradle dengan `-PreactNativeArchitectures=arm64-v8a`
