@@ -166,3 +166,5 @@ npm run ios      # iOS
 - **Build Config**: tambah Hermes + ProGuard di `app.json`, buat `eas.json`, hapus `@react-native-async-storage/async-storage` (tdk dipakai), ignore `.claude/` + `AGENTS.md` + `CLAUDE.md`
 - **GitHub Actions**: workflow `.github/workflows/build.yml` — build APK otomatis tiap push ke master, APX bisa didownload dari Actions tab
 - **Fix CI**: hapus `package-lock.json` dari repo (regenerate via `npm install` di CI), hapus `cache: npm` karena lock file bermasalah dengan `expo-dev-client`
+- **APK size**: build hanya `arm64-v8a` + `shrinkResources` → APK turun dari ~32MB ke ~12-15MB
+- **Workflow final**: `npm install --legacy-peer-deps --ignore-scripts --no-package-lock`, gradle dengan `-PreactNativeArchitectures=arm64-v8a`
