@@ -36,6 +36,11 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# Editor / Agent config
+.claude/
+CLAUDE.md
+AGENTS.md
+
 # generated native folders
 /ios
 /android
