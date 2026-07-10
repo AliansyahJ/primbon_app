@@ -4,7 +4,7 @@
     "slug": "kalender_jawa",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-wayang.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -21,10 +21,13 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.anonymous.kalender_jawa"
+      "package": "com.anonymous.kalender_jawa",
+      "jsEngine": "hermes",
+      "enableProguardInReleaseBuilds": true,
+      "enableHermesOptimizations": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon-wayang.png"
     }
   }
 }

@@ -166,7 +166,10 @@ Ditunda: Notifikasi harian, Deployment.
 ---
 
 #### Deployment & Distribusi
-- [ ] Build APK via EAS Cloud Build
+- [x] Konfigurasi `eas.json` (development, preview APK, production AAB)
+- [x] Hermes + ProGuard di `app.json` untuk APK lebih kecil
+- [x] Hapus `@react-native-async-storage/async-storage` (tidak dipakai)
+- [ ] Build APK via EAS Build: `npx eas-cli build -p android --profile preview`
 - [ ] Deploy versi Web ke Vercel atau Netlify
 - [ ] (Opsional) Publish ke Google Play Store
 

@@ -163,3 +163,4 @@ npm run ios      # iOS
 - **Bug 2**: Duplikasi `PERUNTUNGAN_SKOR` — pindah field `skor` ke `PERUNTUNGAN_INFO` di `primbonData.js`, hapus `PERUNTUNGAN_SKOR` dari `javaneseLogic.js`, `findGoodDays()` baca dari `PERUNTUNGAN_INFO[key].skor` & `.baik`
 - **Bug 3**: Mangsa off-by-1 di tahun kabisat — tambah `isLeapYear()`, `dayOfYear()` sekarang terima parameter `year` dan +1 jika leap & month > 2, `getMangsa()` pass year
 - **Bug 4**: `KeyboardAvoidingView` behavior `'height'` di Android — ganti jadi `undefined` di 3 screen (Weton, Kecocokan, DewasaAyu)
+- **Build Config**: tambah Hermes + ProGuard di `app.json`, buat `eas.json`, hapus `@react-native-async-storage/async-storage` (tdk dipakai), ignore `.claude/` + `AGENTS.md` + `CLAUDE.md`
