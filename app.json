@@ -24,7 +24,8 @@
       "package": "com.anonymous.kalender_jawa",
       "jsEngine": "hermes",
       "enableProguardInReleaseBuilds": true,
-      "enableHermesOptimizations": true
+      "enableHermesOptimizations": true,
+      "enableShrinkResourcesInReleaseBuilds": true
     },
     "web": {
       "favicon": "./assets/icon-wayang.png"
