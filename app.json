@@ -1,11 +1,16 @@
 {
   "expo": {
-    "name": "kalender_jawa",
+    "name": "Kalender Jawa",
     "slug": "kalender_jawa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1A120B"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -15,7 +20,8 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.anonymous.kalender_jawa"
     },
     "web": {
       "favicon": "./assets/favicon.png"
