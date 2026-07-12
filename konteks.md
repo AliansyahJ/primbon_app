@@ -1,7 +1,7 @@
 # Konteks Proyek — Primbon Jawa (primbon-app)
 
 > Nama project: `primbon-app` (package.json) / display "Primbon Jawa" (app.json).
-> Folder repo masih `kalender_jawa` sampai di-rename manual (lihat plan.md Fitur 16).
+> Folder repo sudah `O:\Project\primbon-app`.
 
 > File ini adalah **ringkasan menyeluruh** proyek untuk memudahkan AI agent (atau developer baru)
 > memahami aplikasi dengan cepat. Baca ini dulu sebelum mulai kerja.
@@ -180,11 +180,17 @@ npm run ios      # iOS
   di kartu Hari Ini harus sama dengan di detail card).
 - **Status roadmap:** P1–P5 SELESAI (Kalender, Weton, Kecocokan, Peruntungan, Bulan/Tahun Jawa,
   Dewasa Ayu, Wuku, Pranata Mangsa, Dark/Light toggle, Splash + Onboarding, Horoskop Jawa lengkap). Bugfix batch 1 selesai.
-- **Sisa:** Notifikasi harian (butuh `expo-notifications`), build APK via EAS, deploy web, rename folder manual. Detail di `plan.md`.
+- **Sisa:** Notifikasi harian (butuh `expo-notifications`), build APK via EAS, deploy web. Detail di `plan.md`.
 
 ---
 
 ## 11. Riwayat Perubahan
+
+### 12 Jul 2026 — Icon Wayang + Fix Web + CI
+- **Icon wayang**: launcher (`app.json` icon + Android `adaptiveIcon.foregroundImage` + web favicon) → `assets/icon-wayang.png`. Tab bar (`App.js`) ganti 4 Ionicons → `<Image>` wayang, `tintColor` emas (aktif) / redup (non-aktif). Ionicons tetap dipakai toggle tema. 4 tab pakai gambar sama (dibedakan label + warna).
+- **Fix web**: `npm run web` error `Incompatible React versions` (react 19.2.3 vs react-dom 19.2.7). `package.json` pin `react-dom` exact `19.2.3`. Reinstall + `expo start --web -c`.
+- **CI hardening** (`build.yml`): `paths-ignore` (`**.md`/`.claude`/`.gitignore`/`LICENSE` skip build), `concurrency` cancel-in-progress, `cache: gradle`, artifact rename → `primbon-jawa-apk`.
+- **Belum**: lockfile (masih `--no-package-lock`, deps ngambang), signing key (masih debug key, tak bisa Play Store).
 
 ### 10 Jul 2026 — Fix Bug Batch 1
 - **Bug 1**: Validasi tanggal kombinasi invalid (30 Feb dll) — tambah `isValidDate()` di `javaneseLogic.js`, semua screen pakai fungsi itu, hapus `parseDate()` manual di KecocokanScreen & DewasaAyuScreen
@@ -204,5 +210,5 @@ npm run ios      # iOS
   - Zodiak Mangsa (perluas `PRANATA_MANGSA`: watak/keberuntungan/elemen)
 - **Fix UI**: tab bar Android height 88 + paddingBottom 28 agar tak bertabrakan navigasi sistem (safe-area-context tak dipakai, install diblok)
 - **Rename**: `package.json` name → `primbon-app`, `app.json` name "Primbon Jawa" + slug `primbon-app`.
-  `android.package` DIBIARKAN (ganti = putus EAS). Folder repo rename manual (belum).
+  `android.package` DIBIARKAN (ganti = putus EAS). Folder repo sudah di-rename → `O:\Project\primbon-app`.
 - **Workflow final**: `npm install --legacy-peer-deps --ignore-scripts --no-package-lock`, gradle dengan `-PreactNativeArchitectures=arm64-v8a`

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text, Platform, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,11 +12,13 @@ import OnboardingScreen from './src/screens/OnboardingScreen';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import { storageGet, storageSet } from './src/utils/storage';
 
+const WAYANG_ICON = require('./assets/icon-wayang.png');
+
 const TABS = [
-  { key: 'calendar', label: 'Kalender', icon: 'calendar' },
-  { key: 'weton', label: 'Cek Weton', icon: 'sparkles' },
-  { key: 'kecocokan', label: 'Kecocokan', icon: 'heart' },
-  { key: 'hariBaik', label: 'Hari Baik', icon: 'star' },
+  { key: 'calendar', label: 'Kalender' },
+  { key: 'weton', label: 'Cek Weton' },
+  { key: 'kecocokan', label: 'Kecocokan' },
+  { key: 'hariBaik', label: 'Hari Baik' },
 ];
 
 function AppContent() {
@@ -82,10 +84,13 @@ function AppContent() {
                     onPress={() => setActiveTab(tab.key)}
                     activeOpacity={0.7}
                   >
-                    <Ionicons
-                      name={active ? tab.icon : `${tab.icon}-outline`}
-                      size={24}
-                      color={active ? colors.secondary : colors.textLight}
+                    <Image
+                      source={WAYANG_ICON}
+                      style={[
+                        styles.tabIcon,
+                        { tintColor: active ? colors.secondary : colors.textLight },
+                      ]}
+                      resizeMode="contain"
                     />
                     <Text style={[styles.tabText, active && styles.activeTabText]}>
                       {tab.label}
@@ -154,6 +159,10 @@ const getStyles = (colors) => StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  tabIcon: {
+    width: 24,
+    height: 24,
   },
   tabDivider: {
     width: 1,
