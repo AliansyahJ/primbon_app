@@ -24,7 +24,33 @@
 
 ---
 
-## 📋 Sisa Pekerjaan
+## 🚧 P6 — Perkaya Data Makna (SEDANG DIRENCANAKAN)
+
+Tujuan: perdalam arti/makna tiap konsep. Tanpa field sumber (keputusan user).
+Semua kerja di branch `dev`.
+
+### Fitur 17: DINA_INFO (7 hari)
+- [ ] `primbonData.js` — export `DINA_INFO` keyed `Minggu`..`Sabtu`, tiap entri `{ arti, ikon, filosofi, watak, unsur, keterangan }` (mirror `PASARAN_INFO`)
+- [ ] Tutup asimetri: Pasaran punya info lengkap, Dina cuma nama+neptu
+- [ ] Render: detail card `CalendarScreen` + hasil `WetonCalculatorScreen`
+
+### Fitur 18: Perkaya neptuWatak (12 entri, neptu 7–18)
+- [ ] `primbonData.js` — tiap entri `neptuWatak` tambah `rejeki`, `jodoh`, `karier`, `saran` (samakan struktur `WATAK_WETON`)
+- [ ] Render: kartu Watak Primbon di `WetonCalculatorScreen`
+
+### Fitur 19: Perkaya PASARAN_INFO (5 pasaran)
+- [ ] `primbonData.js` — tiap entri `PASARAN_INFO` tambah `watakPemilik` (watak orang lahir pasaran itu) + `keterangan`
+- [ ] Render: detail Pasaran di `CalendarScreen` / `WetonCalculatorScreen`
+
+### Fitur 20: Glossary Edukasi
+- [ ] File baru `src/data/edukasiData.js` — export `GLOSARIUM` array `{ istilah, ikon, penjelasan }`
+- [ ] Istilah: Weton, Neptu, Dina, Pasaran, Wuku, Pancasuda, Pranata Mangsa, Padangan, Peruntungan
+- [ ] UI: kartu accordion "Apa itu…?" (BlurView, ikuti pola kartu existing) di `WetonCalculatorScreen` + `CalendarScreen`
+
+**Catatan:** murni tambah data + wiring UI. Tak ubah algoritma `javaneseLogic.js` (anchor perhitungan aman).
+
+---
+
 
 ### Build & Deploy
 - [ ] Build APK via EAS: `npx eas-cli build -p android --profile preview`
