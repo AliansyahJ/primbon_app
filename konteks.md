@@ -212,3 +212,36 @@ npm run ios      # iOS
 - **Rename**: `package.json` name → `primbon-app`, `app.json` name "Primbon Jawa" + slug `primbon-app`.
   `android.package` DIBIARKAN (ganti = putus EAS). Folder repo sudah di-rename → `O:\Project\primbon-app`.
 - **Workflow final**: `npm install --legacy-peer-deps --ignore-scripts --no-package-lock`, gradle dengan `-PreactNativeArchitectures=arm64-v8a`
+
+---
+
+## 12. Rencana Berikutnya — P6: Perkaya Data Makna (DITUNDA, mulai ~13 Jul 2026)
+
+> Status: **direncanakan, belum dikerjakan**. Disepakati user 12 Jul, ditunda ke besok.
+> Semua kerja di branch `dev`. Detail checklist di `plan.md` (Fitur 17–20).
+> Sifat: **murni tambah data + wiring UI**. JANGAN sentuh algoritma `javaneseLogic.js` (anchor perhitungan aman).
+> Keputusan user: **tanpa field `sumber`/sitasi** — cukup konten makna.
+
+### Fitur 17 — `DINA_INFO` (7 hari)
+- **Masalah**: Pasaran (5) punya `PASARAN_INFO` lengkap (arti, filosofi, unsur/arah/warna), tapi Dina (7 hari) cuma nama + neptu di `javaneseLogic.js` (`DINA_NAMES`, `DINA_NEPTU`). Asimetris.
+- **Aksi**: export baru `DINA_INFO` di `primbonData.js`, keyed `Minggu`..`Sabtu`. Tiap entri: `{ arti, ikon, filosofi, watak, unsur, keterangan }` — mirror pola `PASARAN_INFO` + `UNSUR_INFO`.
+- **Render**: detail card `CalendarScreen.js` (tap tanggal) + hasil `WetonCalculatorScreen.js`. Import `DINA_INFO`, akses `DINA_INFO[javanese.dina]`.
+
+### Fitur 18 — Perkaya `neptuWatak` (12 entri, neptu 7–18)
+- **Sekarang**: tiap entri `{ nama, ringkasan, detail }`.
+- **Aksi**: tambah `rejeki`, `jodoh`, `karier`, `saran` — samakan struktur `WATAK_WETON` (`watakWetonData.js`) supaya konsisten.
+- **Render**: kartu "Watak Primbon" di `WetonCalculatorScreen.js` (pakai `getPrimbonInsight(totalNeptu)`).
+
+### Fitur 19 — Perkaya `PASARAN_INFO` (5 pasaran)
+- **Sekarang**: `{ arti, penjelasanArti, unsur, arah, warna }`.
+- **Aksi**: tambah `watakPemilik` (watak orang lahir di pasaran itu) + `keterangan`.
+- **Render**: detail Pasaran di `CalendarScreen.js` (line ~256–265) + `WetonCalculatorScreen.js`.
+
+### Fitur 20 — Glossary Edukasi
+- **Aksi**: file baru `src/data/edukasiData.js` → export `GLOSARIUM` (array `{ istilah, ikon, penjelasan }`).
+- **Istilah**: Weton, Neptu, Dina, Pasaran, Wuku, Pancasuda, Pranata Mangsa, Padangan, Peruntungan (9).
+- **UI**: kartu accordion "Apa itu…?" — `BlurView` glassmorphism ikut pola kartu existing (`colors.cardBg`, `colors.cardBorder`, `tint={colors.blurTint}`), toggle expand via `useState`. Taruh di `WetonCalculatorScreen.js` + `CalendarScreen.js`. Helper accordion di luar komponen utama → terima `styles` + `colors` sebagai prop (konvensi wajib).
+
+**Referensi struktur data existing** (tiru gaya penulisan makna):
+- `PASARAN_INFO` / `UNSUR_INFO` di `primbonData.js` — pola filosofi + sifat.
+- `WATAK_WETON` di `watakWetonData.js` — pola rejeki/jodoh/karier/saran.
