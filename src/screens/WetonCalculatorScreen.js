@@ -209,6 +209,28 @@ export default function WetonCalculatorScreen() {
                 <Text style={styles.insightSummary}>"{result.insight.ringkasan}"</Text>
                 <View style={styles.insightDivider} />
                 <Text style={styles.insightDetail}>{result.insight.detail}</Text>
+                {result.insight.rejeki && result.insight.rejeki !== '-' && (
+                  <>
+                    <View style={styles.horoGrid}>
+                      <View style={styles.horoItem}>
+                        <Text style={styles.detailSubLabel}>💰 Rejeki</Text>
+                        <Text style={styles.detailSubText}>{result.insight.rejeki}</Text>
+                      </View>
+                      <View style={styles.horoItem}>
+                        <Text style={styles.detailSubLabel}>❤️ Jodoh</Text>
+                        <Text style={styles.detailSubText}>{result.insight.jodoh}</Text>
+                      </View>
+                      <View style={styles.horoItem}>
+                        <Text style={styles.detailSubLabel}>💼 Karier</Text>
+                        <Text style={styles.detailSubText}>{result.insight.karier}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.saranBox}>
+                      <Ionicons name="bulb-outline" size={14} color={colors.secondary} />
+                      <Text style={styles.saranText}>{result.insight.saran}</Text>
+                    </View>
+                  </>
+                )}
               </BlurView>
 
               {/* Kartu Makna Pasaran */}
