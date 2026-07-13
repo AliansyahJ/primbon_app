@@ -1,13 +1,8 @@
 name: Build APK
 
 on:
-  push:
-    branches: [master]
-    paths-ignore:
-      - '**.md'
-      - '.claude/**'
-      - '.gitignore'
-      - 'LICENSE'
+  # Build manual saja — klik "Run workflow" di tab Actions saat butuh APK.
+  # Push (ke branch mana pun) TIDAK memicu build.
   workflow_dispatch:
 
 concurrency:
