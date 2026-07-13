@@ -174,6 +174,7 @@ npm run ios      # iOS
 
 ## 10. Catatan Penting
 
+- **JANGAN pakai trailer `Co-Authored-By: Claude`** di commit — commit atas nama user saja (lihat `~/.claude/CLAUDE.md` #0).
 - **1 BRANCH SAJA (`master`)** — override aturan global (`~/.claude/CLAUDE.md` #2 soal branch+PR). Project kecil, commit langsung ke `master`. JANGAN bikin branch `dev`/`feat/*`.
 - **CI build APK: MANUAL saja** (`workflow_dispatch`). Push TIDAK memicu build. Jalankan lewat Actions tab → "Build APK" → Run workflow.
 - **AGENTS.md**: baca docs Expo versi 57 (`https://docs.expo.dev/versions/v57.0.0/`) sebelum tulis kode Expo.
