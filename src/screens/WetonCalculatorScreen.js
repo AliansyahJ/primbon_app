@@ -197,6 +197,12 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.pasaranItemValue}>{result.pasaranInfo.warna || '-'}</Text>
                   </View>
                 </View>
+                {result.pasaranInfo.watakPemilik && (
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>Watak Pemilik Pasaran</Text>
+                    <Text style={styles.detailSubText}>{result.pasaranInfo.watakPemilik}</Text>
+                  </View>
+                )}
               </BlurView>
 
               {/* Kartu Watak Primbon */}
