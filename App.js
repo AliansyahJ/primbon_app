@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, TouchableOpacity, Text, Platform, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -23,6 +24,7 @@ const TABS = [
 
 function AppContent() {
   const { colors, mode, toggleMode } = useTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => getStyles(colors), [colors]);
   const [activeTab, setActiveTab] = useState('calendar');
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -51,7 +53,7 @@ function AppContent() {
       colors={[colors.gradientStart, colors.gradientEnd]}
       style={styles.container}
     >
-      <SafeAreaView style={styles.safeArea}>
+      <View style={[styles.safeArea, { paddingTop: insets.top }]}>
         <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
 
         {/* Tombol Toggle Tema */}
@@ -73,7 +75,7 @@ function AppContent() {
 
         {/* Custom Bottom Tab Bar with Glassmorphism */}
         <BlurView intensity={40} tint={colors.blurTint} style={styles.tabBarContainer}>
-          <View style={styles.tabBar}>
+          <View style={[styles.tabBar, { paddingBottom: insets.bottom + 10 }]}>
             {TABS.map((tab, i) => {
               const active = activeTab === tab.key;
               return (
@@ -101,16 +103,18 @@ function AppContent() {
             })}
           </View>
         </BlurView>
-      </SafeAreaView>
+      </View>
     </LinearGradient>
   );
 }
 
 export default function App() {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
 
@@ -149,10 +153,8 @@ const getStyles = (colors) => StyleSheet.create({
   },
   tabBar: {
     flexDirection: 'row',
-    // Ruang ekstra bawah agar tidak bertabrakan dengan navigasi sistem
-    // (gesture bar / tombol navigasi Android). SafeAreaView menangani iOS notch.
-    height: Platform.OS === 'android' ? 88 : 70,
-    paddingBottom: Platform.OS === 'android' ? 28 : 10,
+    // paddingBottom = insets.bottom + 10 (di-set inline) agar tab bar naik
+    // di atas gesture bar / tombol navigasi sistem, presisi per perangkat.
     paddingTop: 10,
   },
   tabItem: {
