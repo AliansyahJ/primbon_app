@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Animated, useWind
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { generateCalendarMonth, getJavaneseDate, getJavaneseCalendar, getPeruntungan, getWuku, getMangsa } from '../utils/javaneseLogic';
-import { PASARAN_INFO, PERUNTUNGAN_INFO } from '../data/primbonData';
+import { PASARAN_INFO, PERUNTUNGAN_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
+import GlosariumCard from '../components/GlosariumCard';
 
 const MONTH_NAMES = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -259,6 +260,17 @@ export default function CalendarScreen() {
               <Text style={styles.detailLabel}>Unsur</Text>
               <Text style={styles.detailValue}>{PASARAN_INFO[selectedDay.javanese.pasaran]?.unsur || '-'}</Text>
             </View>
+            {DINA_INFO[selectedDay.javanese.dina] && (
+              <View style={styles.detailArtiBox}>
+                <Text style={styles.detailArtiLabel}>
+                  Makna Hari {selectedDay.javanese.dina}
+                </Text>
+                <Text style={styles.detailWukuDewa}>
+                  {DINA_INFO[selectedDay.javanese.dina].ikon} {DINA_INFO[selectedDay.javanese.dina].arti} · Unsur {DINA_INFO[selectedDay.javanese.dina].unsur}
+                </Text>
+                <Text style={styles.detailArtiText}>{DINA_INFO[selectedDay.javanese.dina].filosofi}</Text>
+              </View>
+            )}
             {PASARAN_INFO[selectedDay.javanese.pasaran]?.penjelasanArti && (
               <View style={styles.detailArtiBox}>
                 <Text style={styles.detailArtiLabel}>Makna Pasaran</Text>
@@ -316,6 +328,10 @@ export default function CalendarScreen() {
             })()}
           </BlurView>
         )}
+
+        <View style={{ width: '100%', maxWidth, alignSelf: 'center' }}>
+          <GlosariumCard />
+        </View>
 
       </View>
     </ScrollView>

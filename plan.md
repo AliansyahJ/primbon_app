@@ -24,30 +24,29 @@
 
 ---
 
-## 🚧 P6 — Perkaya Data Makna (SEDANG DIRENCANAKAN)
+## ✅ P6 — Perkaya Data Makna (SELESAI)
 
-Tujuan: perdalam arti/makna tiap konsep. Tanpa field sumber (keputusan user).
-Semua kerja di branch `dev`.
+Tujuan: perdalam arti/makna tiap konsep. Tanpa field sumber (keputusan user). Kerja di branch `dev`.
 
 ### Fitur 17: DINA_INFO (7 hari)
-- [ ] `primbonData.js` — export `DINA_INFO` keyed `Minggu`..`Sabtu`, tiap entri `{ arti, ikon, filosofi, watak, unsur, keterangan }` (mirror `PASARAN_INFO`)
-- [ ] Tutup asimetri: Pasaran punya info lengkap, Dina cuma nama+neptu
-- [ ] Render: detail card `CalendarScreen` + hasil `WetonCalculatorScreen`
+- [x] `primbonData.js` — export `DINA_INFO` keyed `Minggu`..`Sabtu` `{ arti, ikon, filosofi, watak, unsur, keterangan }`
+- [x] Render: kartu "Makna Hari" di detail `CalendarScreen` + kartu "Info Dina" di `WetonCalculatorScreen`
 
 ### Fitur 18: Perkaya neptuWatak (12 entri, neptu 7–18)
-- [ ] `primbonData.js` — tiap entri `neptuWatak` tambah `rejeki`, `jodoh`, `karier`, `saran` (samakan struktur `WATAK_WETON`)
-- [ ] Render: kartu Watak Primbon di `WetonCalculatorScreen`
+- [x] `primbonData.js` — tiap entri tambah `rejeki`, `jodoh`, `karier`, `saran` + fallback `getPrimbonInsight`
+- [x] Render: kartu Watak Primbon di `WetonCalculatorScreen`
 
 ### Fitur 19: Perkaya PASARAN_INFO (5 pasaran)
-- [ ] `primbonData.js` — tiap entri `PASARAN_INFO` tambah `watakPemilik` (watak orang lahir pasaran itu) + `keterangan`
-- [ ] Render: detail Pasaran di `CalendarScreen` / `WetonCalculatorScreen`
+- [x] `primbonData.js` — tiap entri tambah `watakPemilik` + `keterangan`
+- [x] Render: kartu Info Pasaran di `WetonCalculatorScreen`
 
 ### Fitur 20: Glossary Edukasi
-- [ ] File baru `src/data/edukasiData.js` — export `GLOSARIUM` array `{ istilah, ikon, penjelasan }`
-- [ ] Istilah: Weton, Neptu, Dina, Pasaran, Wuku, Pancasuda, Pranata Mangsa, Padangan, Peruntungan
-- [ ] UI: kartu accordion "Apa itu…?" (BlurView, ikuti pola kartu existing) di `WetonCalculatorScreen` + `CalendarScreen`
+- [x] `src/data/edukasiData.js` — `GLOSARIUM` 9 istilah `{ istilah, ikon, penjelasan }`
+- [x] Komponen reusable `src/components/GlosariumCard.js` (accordion, LayoutAnimation)
+- [x] Pasang di `WetonCalculatorScreen` + `CalendarScreen`
 
-**Catatan:** murni tambah data + wiring UI. Tak ubah algoritma `javaneseLogic.js` (anchor perhitungan aman).
+**Catatan:** murni tambah data + wiring UI. `javaneseLogic.js` tak disentuh. Semua file lolos `node --check`.
+Belum diverifikasi visual via `npm run web` (perlu user).
 
 ---
 

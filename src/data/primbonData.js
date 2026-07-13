@@ -109,6 +109,69 @@ export const WARNA_INFO = {
 };
 
 // ============================================================
+// DATA DINA (7 HARI JAWA / SAPTAWARA)
+// Melengkapi PASARAN_INFO — tiap hari punya arti, watak, unsur.
+// ============================================================
+export const DINA_INFO = {
+  Minggu: {
+    arti: 'Radite / Matahari',
+    ikon: '☀️',
+    filosofi: 'Minggu (Radite) dinaungi Matahari — sumber cahaya dan kehidupan. Dalam primbon Jawa, hari ini melambangkan pancaran diri, kepemimpinan, dan kehendak yang menyala terang.',
+    watak: 'Percaya diri, mandiri, dan suka menonjol. Punya wibawa alami dan senang menjadi pusat perhatian, namun kadang keras kepala pada pendirian sendiri.',
+    unsur: 'Api',
+    keterangan: 'Neptu 5. Baik untuk memulai hal yang butuh keberanian tampil, kurang cocok untuk urusan yang menuntut kesabaran panjang.',
+  },
+  Senin: {
+    arti: 'Soma / Bulan',
+    ikon: '🌙',
+    filosofi: 'Senin (Soma) dinaungi Bulan — lembut, teduh, dan penuh perasaan. Hari ini melambangkan ketenangan batin, welas asih, dan kepekaan terhadap suasana hati orang lain.',
+    watak: 'Lembut hati, penyayang, dan penuh empati. Pandai meredakan suasana, tetapi mudah terbawa perasaan dan kadang ragu mengambil keputusan.',
+    unsur: 'Air',
+    keterangan: 'Neptu 4. Baik untuk urusan keluarga, pernikahan, dan hal yang butuh kehalusan; hindari konflik terbuka.',
+  },
+  Selasa: {
+    arti: 'Anggara / Mars',
+    ikon: '🔥',
+    filosofi: 'Selasa (Anggara) dinaungi Mars — panas, tegas, dan penuh daya juang. Hari ini melambangkan keberanian, ketegasan, dan semangat yang membara.',
+    watak: 'Berani, tegas, dan bersemangat. Tak gentar menghadapi tantangan, namun mudah tersulut emosi dan kadang terburu-buru.',
+    unsur: 'Api',
+    keterangan: 'Neptu 3 (terendah). Dalam banyak petungan dianggap kurang menguntungkan untuk hajat besar; baik untuk urusan yang butuh ketegasan.',
+  },
+  Rabu: {
+    arti: 'Buda / Merkurius',
+    ikon: '🌿',
+    filosofi: 'Rabu (Buda) dinaungi Merkurius — cerdas, luwes, dan komunikatif. Hari ini melambangkan kecerdikan, kepandaian berbicara, dan kemampuan berdagang.',
+    watak: 'Cerdas, pandai bergaul, dan mudah menyesuaikan diri. Lincah dalam berpikir, tetapi kadang kurang teguh dan mudah berubah pikiran.',
+    unsur: 'Angin',
+    keterangan: 'Neptu 7. Baik untuk perjalanan, dagang, belajar, dan urusan yang butuh komunikasi.',
+  },
+  Kamis: {
+    arti: 'Respati / Jupiter',
+    ikon: '⭐',
+    filosofi: 'Kamis (Respati) dinaungi Jupiter — bijaksana, berwibawa, dan penuh berkah. Hari ini melambangkan kemuliaan, kebijaksanaan, dan restu dari yang di atas.',
+    watak: 'Bijaksana, berwibawa, dan dermawan. Dihormati banyak orang dan pandai membimbing, namun kadang terlalu idealis.',
+    unsur: 'Api',
+    keterangan: 'Neptu 8 (tertinggi). Dianggap hari baik untuk hampir segala hajat: nikah, usaha, syukuran.',
+  },
+  Jumat: {
+    arti: 'Sukra / Venus',
+    ikon: '🌸',
+    filosofi: 'Jumat (Sukra) dinaungi Venus — indah, damai, dan penuh kasih. Hari ini melambangkan keharmonisan, keindahan, dan kesucian. Dalam tradisi Jawa-Islam, Jumat adalah hari yang dimuliakan.',
+    watak: 'Ramah, penuh kasih, dan cinta keindahan. Pandai menjaga keharmonisan, tetapi kadang terlalu mengalah dan menghindari konflik.',
+    unsur: 'Bumi',
+    keterangan: 'Neptu 6. Baik untuk ibadah, pernikahan, dan urusan damai; Jumat Kliwon dianggap sangat sakral.',
+  },
+  Sabtu: {
+    arti: 'Tumpak / Saturnus',
+    ikon: '⛰️',
+    filosofi: 'Sabtu (Tumpak) dinaungi Saturnus — kokoh, tekun, dan tahan uji. Hari ini melambangkan keteguhan, kerja keras, dan kesabaran menapaki jalan panjang.',
+    watak: 'Tekun, sabar, dan pekerja keras. Teguh memegang prinsip dan dapat diandalkan, namun kadang kaku dan sulit berkompromi.',
+    unsur: 'Bumi',
+    keterangan: 'Neptu 9 (tertinggi bersama Pahing). Baik untuk pekerjaan yang butuh ketekunan; kurang cocok untuk pindah rumah menurut sebagian primbon.',
+  },
+};
+
+// ============================================================
 // DATA PASARAN (5 HARI JAWA)
 // ============================================================
 export const PASARAN_INFO = {
@@ -118,6 +181,8 @@ export const PASARAN_INFO = {
     unsur: 'Api',
     arah: 'Timur',
     warna: 'Putih',
+    watakPemilik: 'Orang berpasaran Legi umumnya ramah, murah hati, dan menyenangkan dalam pergaulan. Punya wibawa yang halus dan disukai banyak orang, namun kadang terlalu mudah percaya.',
+    keterangan: 'Pasaran yang dianggap membawa keberkahan; baik untuk memulai hal-hal baik seperti pernikahan dan hajatan.',
   },
   Pahing: {
     arti: 'Pahit / Berat',
@@ -125,6 +190,8 @@ export const PASARAN_INFO = {
     unsur: 'Bumi',
     arah: 'Selatan',
     warna: 'Merah',
+    watakPemilik: 'Orang berpasaran Pahing berkemauan keras, ambisius, dan pantang menyerah. Punya daya juang tinggi dan tak mudah goyah, namun kadang keras kepala dan sulit menerima masukan.',
+    keterangan: 'Neptu tinggi (9); melambangkan ketahanan menghadapi kesulitan. Baik untuk pekerjaan yang butuh keuletan.',
   },
   Pon: {
     arti: 'Panas / Bergelora',
@@ -132,6 +199,8 @@ export const PASARAN_INFO = {
     unsur: 'Angin',
     arah: 'Barat',
     warna: 'Kuning',
+    watakPemilik: 'Orang berpasaran Pon cerdas, cekatan, dan pandai mengatur. Punya jiwa mandiri dan senang membantu sesama, namun kadang terkesan pamer dan mudah gelisah.',
+    keterangan: 'Melambangkan energi dan gerak; baik untuk memulai usaha, dagang, atau kegiatan yang butuh semangat.',
   },
   Wage: {
     arti: 'Tajam / Tegas',
@@ -139,6 +208,8 @@ export const PASARAN_INFO = {
     unsur: 'Air',
     arah: 'Utara',
     warna: 'Hitam',
+    watakPemilik: 'Orang berpasaran Wage teguh pendirian, jujur, dan bertanggung jawab. Setia dan bisa diandalkan, namun kadang kaku, pendendam, dan sulit memaafkan.',
+    keterangan: 'Melambangkan ketegasan dan kestabilan; baik untuk keputusan yang butuh ketegasan, kurang cocok untuk bepergian jauh menurut sebagian primbon.',
   },
   Kliwon: {
     arti: 'Sakral / Keramat',
@@ -146,6 +217,8 @@ export const PASARAN_INFO = {
     unsur: 'Ether',
     arah: 'Tengah',
     warna: 'Kuning Emas',
+    watakPemilik: 'Orang berpasaran Kliwon berjiwa spiritual, peka, dan penuh wibawa batin. Sering punya firasat tajam dan pembawaan tenang, namun kadang tertutup dan sulit dipahami.',
+    keterangan: 'Pasaran paling sakral; dianggap istimewa untuk ibadah, meditasi, dan hajat penting. Kombinasi dengan Jumat (Jumat Kliwon) sangat dimuliakan.',
   },
 };
 
@@ -157,61 +230,109 @@ export const neptuWatak = {
     nama: 'Pendok',
     ringkasan: 'Pengembara berjiwa bebas',
     detail: 'Suka bepergian dan menjelajah tempat baru. Pandai berbicara dan menjalin relasi. Kadang terkesan santai, namun memiliki kecerdasan yang tajam.',
+    rejeki: 'Rezeki datang dari banyak arah dan sering lewat perjalanan atau relasi luas; perlu belajar menabung agar tidak cepat habis.',
+    jodoh: 'Cocok dengan pasangan yang memberi kebebasan namun tetap menjadi tempat pulang yang hangat.',
+    karier: 'Bersinar di bidang yang menuntut mobilitas: perdagangan, pemandu, jurnalistik, atau pemasaran.',
+    saran: 'Tetapkan satu tujuan jangka panjang agar energi petualang tidak tersebar sia-sia.',
   },
   8: {
     nama: 'Cacah Awu',
     ringkasan: 'Pejuang berapi-api',
     detail: 'Memiliki keberanian yang tinggi dan semangat juang yang membara. Tegas dalam pendirian, walau terkadang mudah terpancing emosi. Cocok menjadi pemimpin di lapangan.',
+    rejeki: 'Rezeki diraih lewat kerja keras dan keberanian mengambil peluang; keberuntungan berpihak pada yang berani.',
+    jodoh: 'Serasi dengan pasangan yang sabar dan mampu meredam gejolak emosinya.',
+    karier: 'Unggul di bidang yang butuh nyali dan ketegasan: militer, olahraga, wirausaha, atau kepemimpinan lapangan.',
+    saran: 'Kelola emosi sebelum bertindak agar keberanian tidak berubah menjadi kecerobohan.',
   },
   9: {
     nama: 'Dadi Kayu',
     ringkasan: 'Pribadi yang teduh',
     detail: 'Pendiam dan kalem, namun memiliki keteguhan hati yang luar biasa. Mudah memaafkan kesalahan orang lain. Seperti pohon besar yang kokoh dan mengayomi.',
+    rejeki: 'Rezeki mengalir stabil dan tahan lama berkat kesabaran serta kepercayaan orang lain.',
+    jodoh: 'Cocok dengan pasangan yang menghargai ketenangan dan kesetiaan.',
+    karier: 'Cocok di bidang yang butuh ketekunan dan keteduhan: pendidikan, pertanian, konseling, atau kehutanan.',
+    saran: 'Berani menyuarakan pendapat agar kebaikan hati tidak dimanfaatkan orang lain.',
   },
   10: {
     nama: 'Pendita Mbangun Teki',
     ringkasan: 'Sang penasehat bijak',
     detail: 'Suka menasehati dan membimbing orang lain ke jalan yang benar. Cerdas dan berwawasan luas. Pendiam namun perkataannya selalu berbobot dan didengarkan.',
+    rejeki: 'Rezeki datang dari ilmu dan kepercayaan; sering menjadi tempat orang meminta nasihat yang berbuah keberkahan.',
+    jodoh: 'Serasi dengan pasangan yang cerdas dan mau diajak berdiskusi mendalam.',
+    karier: 'Menonjol di bidang keilmuan dan pembinaan: guru, ulama, penasihat, konsultan, atau peneliti.',
+    saran: 'Sesekali turun dari menara ilmu dan dengarkan perasaan orang, bukan hanya logika.',
   },
   11: {
     nama: 'Macan Ketawan',
     ringkasan: 'Pemimpin karismatik',
     detail: 'Pemberani, berwibawa, dan disegani di lingkungannya. Seperti harimau yang agung, memiliki aura kepemimpinan alami. Namun kadang ragu-ragu dalam mengambil keputusan besar.',
+    rejeki: 'Rezeki datang dari kewibawaan dan jabatan; sering dipercaya memegang tanggung jawab besar.',
+    jodoh: 'Cocok dengan pasangan yang percaya diri dan bangga mendampingi tanpa merasa terkalahkan.',
+    karier: 'Unggul di posisi pemimpin: manajer, kepala organisasi, pejabat, atau tokoh masyarakat.',
+    saran: 'Mantapkan keputusan; keraguan sesaat bisa menggoyahkan wibawa yang sudah dibangun.',
   },
   12: {
     nama: 'Laku Kembang',
     ringkasan: 'Cinta damai & penyayang',
     detail: 'Pribadi yang lembut, cinta damai, dan selalu mengalah demi keharmonisan. Disukai banyak orang karena auranya yang menyenangkan. Seperti bunga yang mekar indah dan menyebarkan kebahagiaan.',
+    rejeki: 'Rezeki datang lewat pergaulan dan simpati orang; disukai sehingga banyak pintu terbuka.',
+    jodoh: 'Serasi dengan pasangan yang melindungi dan menghargai kelembutannya.',
+    karier: 'Cocok di bidang yang mengandalkan keramahan: pelayanan, seni, humas, atau perhotelan.',
+    saran: 'Belajar berkata tidak agar sikap mengalah tidak merugikan diri sendiri.',
   },
   13: {
     nama: 'Lintang Kemukus',
     ringkasan: 'Petualang berkarisma',
     detail: 'Banyak bicara dan penuh semangat. Suka petualangan dan tantangan baru. Memiliki karisma bintang yang membuat orang-orang di sekitarnya terpesona.',
+    rejeki: 'Rezeki gampang datang dari ide dan daya tarik pribadi, tetapi butuh kedisiplinan agar tidak cepat menguap.',
+    jodoh: 'Cocok dengan pasangan yang mengimbangi energi dan tidak mudah cemburu pada popularitasnya.',
+    karier: 'Bersinar di bidang kreatif dan publik: hiburan, presenter, pemasaran, atau wirausaha kreatif.',
+    saran: 'Fokus menuntaskan satu hal sebelum meloncat ke tantangan berikutnya.',
   },
   14: {
     nama: 'Laku Mbulan',
     ringkasan: 'Pencerah & pendengar',
     detail: 'Seperti bulan yang menerangi malam, Anda adalah sosok pencerah bagi orang-orang di sekitar. Pendengar yang baik, cerdas, dan memiliki kebijaksanaan yang dalam.',
+    rejeki: 'Rezeki datang dari kepercayaan orang yang merasa tenang di dekat Anda; sering jadi penengah yang dihargai.',
+    jodoh: 'Serasi dengan pasangan yang menghargai kedalaman batin dan kesetiaan.',
+    karier: 'Cocok di bidang yang butuh empati dan kebijaksanaan: psikologi, mediasi, perawatan, atau bimbingan.',
+    saran: 'Sisihkan waktu untuk diri sendiri agar tidak lelah menampung beban orang lain.',
   },
   15: {
     nama: 'Laku Geni',
     ringkasan: 'Api yang tak terpadamkan',
     detail: 'Tegas, disiplin, dan penuh determinasi. Seperti api yang berkobar, sulit untuk dipadamkan semangatnya. Keras kepala namun memiliki integritas tinggi.',
+    rejeki: 'Rezeki diraih lewat kegigihan dan konsistensi; sekali menetapkan target, jarang berhenti sebelum tercapai.',
+    jodoh: 'Cocok dengan pasangan yang teguh dan tidak mudah menyerah saat menghadapi sifat kerasnya.',
+    karier: 'Unggul di bidang yang menuntut disiplin tinggi: hukum, keuangan, teknik, atau manajemen ketat.',
+    saran: 'Lunakkan pendirian sesekali; tidak semua hal perlu dimenangkan.',
   },
   16: {
     nama: 'Laku Banyu',
     ringkasan: 'Tenang bagai air',
     detail: 'Tenang, membumi, dan menjadi pengayom yang baik. Seperti air yang mengalir, mampu menyesuaikan diri dengan situasi apa pun. Bijaksana dan penuh kasih sayang.',
+    rejeki: 'Rezeki mengalir lancar dan luwes; mudah menyesuaikan diri sehingga peluang datang dari mana saja.',
+    jodoh: 'Serasi dengan pasangan yang menghargai ketenangan dan mau diajak menyelesaikan masalah dengan kepala dingin.',
+    karier: 'Cocok di bidang yang butuh keluwesan dan pengayoman: diplomasi, pelayanan sosial, manajemen SDM.',
+    saran: 'Tegaskan batas diri agar sifat mengalir tidak membuat Anda kehilangan arah sendiri.',
   },
   17: {
     nama: 'Laku Bumi',
     ringkasan: 'Kokoh & setia',
     detail: 'Sabar, pekerja keras, dan setia. Seperti bumi yang tidak pernah mengeluh menopang kehidupan. Pribadi yang bisa diandalkan dan dipercaya oleh siapa pun.',
+    rejeki: 'Rezeki datang perlahan namun kokoh dan berkah berkat ketekunan serta kejujuran.',
+    jodoh: 'Cocok dengan pasangan yang setia dan menghargai pengorbanan diam-diam.',
+    karier: 'Unggul di bidang yang butuh keandalan jangka panjang: administrasi, konstruksi, logistik, atau pertanian.',
+    saran: 'Jangan memendam semuanya sendiri; berbagi beban justru menguatkan.',
   },
   18: {
     nama: 'Paripurna',
     ringkasan: 'Pribadi sempurna',
     detail: 'Memiliki potensi kepemimpinan yang sangat besar. Berkuasa dan mendominasi di lingkungannya. Diciptakan untuk menjadi sosok yang berpengaruh, namun perlu menjaga agar tidak menjadi sombong.',
+    rejeki: 'Rezeki besar mengikuti pengaruh dan wibawa; sering dipercaya memimpin hal-hal bernilai tinggi.',
+    jodoh: 'Serasi dengan pasangan yang kuat dan mandiri, bukan yang mudah didominasi.',
+    karier: 'Cocok di puncak kepemimpinan: direktur, pemimpin publik, pengusaha besar, atau tokoh berpengaruh.',
+    saran: 'Jaga kerendahan hati; kekuasaan tanpa itu justru menjatuhkan.',
   },
 };
 
@@ -430,5 +551,9 @@ export const getPrimbonInsight = (neptu) => {
     nama: 'Unik',
     ringkasan: 'Karakter yang langka',
     detail: 'Karakter unik yang sedang menanti untuk diungkap lebih dalam.',
+    rejeki: '-',
+    jodoh: '-',
+    karier: '-',
+    saran: '-',
   };
 };
