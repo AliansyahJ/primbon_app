@@ -215,9 +215,18 @@ npm run ios      # iOS
 
 ---
 
-## 12. Rencana Berikutnya — P6: Perkaya Data Makna (DITUNDA, mulai ~13 Jul 2026)
+### 13 Jul 2026 — P6: Perkaya Data Makna (SELESAI, branch dev)
+- **Fitur 17 — `DINA_INFO`**: export baru di `primbonData.js` (7 hari, `{ arti, ikon, filosofi, watak, unsur, keterangan }`). Render kartu "Makna Hari" di detail `CalendarScreen` + kartu "Info Dina" di `WetonCalculatorScreen`.
+- **Fitur 18 — `neptuWatak`+**: 12 entri (neptu 7–18) tambah `rejeki/jodoh/karier/saran` (setara `WATAK_WETON`), fallback `getPrimbonInsight` diisi juga. Render di kartu Watak Primbon.
+- **Fitur 19 — `PASARAN_INFO`+**: 5 pasaran tambah `watakPemilik` + `keterangan`. Render di kartu Info Pasaran.
+- **Fitur 20 — Glossary**: `src/data/edukasiData.js` (`GLOSARIUM` 9 istilah) + komponen reusable `src/components/GlosariumCard.js` (accordion expand/collapse, LayoutAnimation). Dipasang di `WetonCalculatorScreen` + `CalendarScreen`.
+- **Catatan**: `javaneseLogic.js` tak disentuh. Folder `src/components/` baru. Semua lolos `node --check`. Belum verifikasi visual `npm run web`. 11 commit atomic di branch `dev`, belum di-PR/merge ke master.
 
-> Status: **direncanakan, belum dikerjakan**. Disepakati user 12 Jul, ditunda ke besok.
+---
+
+## 12. Riwayat P6 (arsip rencana — sudah selesai)
+
+> Status: **SELESAI 13 Jul 2026** (lihat riwayat di atas). Bagian di bawah arsip rencana awal.
 > Semua kerja di branch `dev`. Detail checklist di `plan.md` (Fitur 17–20).
 > Sifat: **murni tambah data + wiring UI**. JANGAN sentuh algoritma `javaneseLogic.js` (anchor perhitungan aman).
 > Keputusan user: **tanpa field `sumber`/sitasi** — cukup konten makna.
