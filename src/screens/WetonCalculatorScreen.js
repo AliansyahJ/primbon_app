@@ -6,6 +6,7 @@ import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, get
 import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
+import GlosariumCard from '../components/GlosariumCard';
 
 export default function WetonCalculatorScreen() {
   const { colors } = useTheme();
@@ -416,6 +417,8 @@ export default function WetonCalculatorScreen() {
               <Text style={styles.horoskopDisclaimer}>
                 * Horoskop Jawa adalah panduan tradisi primbon, bukan kepastian.
               </Text>
+
+              <GlosariumCard />
 
             </Animated.View>
           )}
