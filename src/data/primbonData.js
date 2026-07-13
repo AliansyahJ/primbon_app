@@ -181,6 +181,8 @@ export const PASARAN_INFO = {
     unsur: 'Api',
     arah: 'Timur',
     warna: 'Putih',
+    watakPemilik: 'Orang berpasaran Legi umumnya ramah, murah hati, dan menyenangkan dalam pergaulan. Punya wibawa yang halus dan disukai banyak orang, namun kadang terlalu mudah percaya.',
+    keterangan: 'Pasaran yang dianggap membawa keberkahan; baik untuk memulai hal-hal baik seperti pernikahan dan hajatan.',
   },
   Pahing: {
     arti: 'Pahit / Berat',
@@ -188,6 +190,8 @@ export const PASARAN_INFO = {
     unsur: 'Bumi',
     arah: 'Selatan',
     warna: 'Merah',
+    watakPemilik: 'Orang berpasaran Pahing berkemauan keras, ambisius, dan pantang menyerah. Punya daya juang tinggi dan tak mudah goyah, namun kadang keras kepala dan sulit menerima masukan.',
+    keterangan: 'Neptu tinggi (9); melambangkan ketahanan menghadapi kesulitan. Baik untuk pekerjaan yang butuh keuletan.',
   },
   Pon: {
     arti: 'Panas / Bergelora',
@@ -195,6 +199,8 @@ export const PASARAN_INFO = {
     unsur: 'Angin',
     arah: 'Barat',
     warna: 'Kuning',
+    watakPemilik: 'Orang berpasaran Pon cerdas, cekatan, dan pandai mengatur. Punya jiwa mandiri dan senang membantu sesama, namun kadang terkesan pamer dan mudah gelisah.',
+    keterangan: 'Melambangkan energi dan gerak; baik untuk memulai usaha, dagang, atau kegiatan yang butuh semangat.',
   },
   Wage: {
     arti: 'Tajam / Tegas',
@@ -202,6 +208,8 @@ export const PASARAN_INFO = {
     unsur: 'Air',
     arah: 'Utara',
     warna: 'Hitam',
+    watakPemilik: 'Orang berpasaran Wage teguh pendirian, jujur, dan bertanggung jawab. Setia dan bisa diandalkan, namun kadang kaku, pendendam, dan sulit memaafkan.',
+    keterangan: 'Melambangkan ketegasan dan kestabilan; baik untuk keputusan yang butuh ketegasan, kurang cocok untuk bepergian jauh menurut sebagian primbon.',
   },
   Kliwon: {
     arti: 'Sakral / Keramat',
@@ -209,6 +217,8 @@ export const PASARAN_INFO = {
     unsur: 'Ether',
     arah: 'Tengah',
     warna: 'Kuning Emas',
+    watakPemilik: 'Orang berpasaran Kliwon berjiwa spiritual, peka, dan penuh wibawa batin. Sering punya firasat tajam dan pembawaan tenang, namun kadang tertutup dan sulit dipahami.',
+    keterangan: 'Pasaran paling sakral; dianggap istimewa untuk ibadah, meditasi, dan hajat penting. Kombinasi dengan Jumat (Jumat Kliwon) sangat dimuliakan.',
   },
 };
 
