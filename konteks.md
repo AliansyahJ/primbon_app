@@ -195,6 +195,11 @@ npm run ios      # iOS
 - **CI hardening** (`build.yml`): `paths-ignore` (`**.md`/`.claude`/`.gitignore`/`LICENSE` skip build), `concurrency` cancel-in-progress, `cache: gradle`, artifact rename → `primbon-jawa-apk`.
 - **Belum**: lockfile (masih `--no-package-lock`, deps ngambang), signing key (masih debug key, tak bisa Play Store).
 
+### 13 Jul 2026 (lanjutan) — Fix Tab Bar Nav Sistem (proper)
+- **Ganti pendekatan**: `react-native-safe-area-context` (~5.7.0) SEKARANG DIPAKAI — sebelumnya diblok, kini terinstal lewat `npm install --ignore-scripts` (bypass `~/.npmrc allow-scripts`).
+- `App.js`: `SafeAreaProvider` bungkus root, `useSafeAreaInsets()` → `paddingTop: insets.top` (toggle tema) + `paddingBottom: insets.bottom + 10` (tab bar). Hapus `height`/`paddingBottom` hardcode Platform. Presisi tiap perangkat, aman di web (inset 0).
+- Ganti `SafeAreaView` (RN) → `View` + inset manual.
+
 ### 10 Jul 2026 — Fix Bug Batch 1
 - **Bug 1**: Validasi tanggal kombinasi invalid (30 Feb dll) — tambah `isValidDate()` di `javaneseLogic.js`, semua screen pakai fungsi itu, hapus `parseDate()` manual di KecocokanScreen & DewasaAyuScreen
 - **Bug 2**: Duplikasi `PERUNTUNGAN_SKOR` — pindah field `skor` ke `PERUNTUNGAN_INFO` di `primbonData.js`, hapus `PERUNTUNGAN_SKOR` dari `javaneseLogic.js`, `findGoodDays()` baca dari `PERUNTUNGAN_INFO[key].skor` & `.baik`
@@ -211,7 +216,7 @@ npm run ios      # iOS
   - Wuku Lahir (perluas `WUKU_DATA`: bakat/keberuntungan/pantangan/pohon/burung)
   - Pancasuda (`pancasudaData.js` → `PANCASUDA_INFO` 7 jenis, `getPancasuda()`)
   - Zodiak Mangsa (perluas `PRANATA_MANGSA`: watak/keberuntungan/elemen)
-- **Fix UI**: tab bar Android height 88 + paddingBottom 28 agar tak bertabrakan navigasi sistem (safe-area-context tak dipakai, install diblok)
+- **Fix UI**: tab bar Android height 88 + paddingBottom 28 (DIGANTI 13 Jul — kini pakai safe-area-context, lihat entri di atas)
 - **Rename**: `package.json` name → `primbon-app`, `app.json` name "Primbon Jawa" + slug `primbon-app`.
   `android.package` DIBIARKAN (ganti = putus EAS). Folder repo sudah di-rename → `O:\Project\primbon-app`.
 - **Workflow final**: `npm install --legacy-peer-deps --ignore-scripts --no-package-lock`, gradle dengan `-PreactNativeArchitectures=arm64-v8a`
