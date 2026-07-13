@@ -109,6 +109,69 @@ export const WARNA_INFO = {
 };
 
 // ============================================================
+// DATA DINA (7 HARI JAWA / SAPTAWARA)
+// Melengkapi PASARAN_INFO — tiap hari punya arti, watak, unsur.
+// ============================================================
+export const DINA_INFO = {
+  Minggu: {
+    arti: 'Radite / Matahari',
+    ikon: '☀️',
+    filosofi: 'Minggu (Radite) dinaungi Matahari — sumber cahaya dan kehidupan. Dalam primbon Jawa, hari ini melambangkan pancaran diri, kepemimpinan, dan kehendak yang menyala terang.',
+    watak: 'Percaya diri, mandiri, dan suka menonjol. Punya wibawa alami dan senang menjadi pusat perhatian, namun kadang keras kepala pada pendirian sendiri.',
+    unsur: 'Api',
+    keterangan: 'Neptu 5. Baik untuk memulai hal yang butuh keberanian tampil, kurang cocok untuk urusan yang menuntut kesabaran panjang.',
+  },
+  Senin: {
+    arti: 'Soma / Bulan',
+    ikon: '🌙',
+    filosofi: 'Senin (Soma) dinaungi Bulan — lembut, teduh, dan penuh perasaan. Hari ini melambangkan ketenangan batin, welas asih, dan kepekaan terhadap suasana hati orang lain.',
+    watak: 'Lembut hati, penyayang, dan penuh empati. Pandai meredakan suasana, tetapi mudah terbawa perasaan dan kadang ragu mengambil keputusan.',
+    unsur: 'Air',
+    keterangan: 'Neptu 4. Baik untuk urusan keluarga, pernikahan, dan hal yang butuh kehalusan; hindari konflik terbuka.',
+  },
+  Selasa: {
+    arti: 'Anggara / Mars',
+    ikon: '🔥',
+    filosofi: 'Selasa (Anggara) dinaungi Mars — panas, tegas, dan penuh daya juang. Hari ini melambangkan keberanian, ketegasan, dan semangat yang membara.',
+    watak: 'Berani, tegas, dan bersemangat. Tak gentar menghadapi tantangan, namun mudah tersulut emosi dan kadang terburu-buru.',
+    unsur: 'Api',
+    keterangan: 'Neptu 3 (terendah). Dalam banyak petungan dianggap kurang menguntungkan untuk hajat besar; baik untuk urusan yang butuh ketegasan.',
+  },
+  Rabu: {
+    arti: 'Buda / Merkurius',
+    ikon: '🌿',
+    filosofi: 'Rabu (Buda) dinaungi Merkurius — cerdas, luwes, dan komunikatif. Hari ini melambangkan kecerdikan, kepandaian berbicara, dan kemampuan berdagang.',
+    watak: 'Cerdas, pandai bergaul, dan mudah menyesuaikan diri. Lincah dalam berpikir, tetapi kadang kurang teguh dan mudah berubah pikiran.',
+    unsur: 'Angin',
+    keterangan: 'Neptu 7. Baik untuk perjalanan, dagang, belajar, dan urusan yang butuh komunikasi.',
+  },
+  Kamis: {
+    arti: 'Respati / Jupiter',
+    ikon: '⭐',
+    filosofi: 'Kamis (Respati) dinaungi Jupiter — bijaksana, berwibawa, dan penuh berkah. Hari ini melambangkan kemuliaan, kebijaksanaan, dan restu dari yang di atas.',
+    watak: 'Bijaksana, berwibawa, dan dermawan. Dihormati banyak orang dan pandai membimbing, namun kadang terlalu idealis.',
+    unsur: 'Api',
+    keterangan: 'Neptu 8 (tertinggi). Dianggap hari baik untuk hampir segala hajat: nikah, usaha, syukuran.',
+  },
+  Jumat: {
+    arti: 'Sukra / Venus',
+    ikon: '🌸',
+    filosofi: 'Jumat (Sukra) dinaungi Venus — indah, damai, dan penuh kasih. Hari ini melambangkan keharmonisan, keindahan, dan kesucian. Dalam tradisi Jawa-Islam, Jumat adalah hari yang dimuliakan.',
+    watak: 'Ramah, penuh kasih, dan cinta keindahan. Pandai menjaga keharmonisan, tetapi kadang terlalu mengalah dan menghindari konflik.',
+    unsur: 'Bumi',
+    keterangan: 'Neptu 6. Baik untuk ibadah, pernikahan, dan urusan damai; Jumat Kliwon dianggap sangat sakral.',
+  },
+  Sabtu: {
+    arti: 'Tumpak / Saturnus',
+    ikon: '⛰️',
+    filosofi: 'Sabtu (Tumpak) dinaungi Saturnus — kokoh, tekun, dan tahan uji. Hari ini melambangkan keteguhan, kerja keras, dan kesabaran menapaki jalan panjang.',
+    watak: 'Tekun, sabar, dan pekerja keras. Teguh memegang prinsip dan dapat diandalkan, namun kadang kaku dan sulit berkompromi.',
+    unsur: 'Bumi',
+    keterangan: 'Neptu 9 (tertinggi bersama Pahing). Baik untuk pekerjaan yang butuh ketekunan; kurang cocok untuk pindah rumah menurut sebagian primbon.',
+  },
+};
+
+// ============================================================
 // DATA PASARAN (5 HARI JAWA)
 // ============================================================
 export const PASARAN_INFO = {
