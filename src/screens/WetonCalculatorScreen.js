@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
 import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, getMangsa } from '../utils/javaneseLogic';
-import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO } from '../data/primbonData';
+import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -29,12 +29,14 @@ export default function WetonCalculatorScreen() {
     const javaneseData = getJavaneseDate(inputDate);
     const insight = getPrimbonInsight(javaneseData.totalNeptu);
     const pasaranInfo = PASARAN_INFO[javaneseData.pasaran] || {};
+    const dinaInfo = DINA_INFO[javaneseData.dina] || {};
 
     setResult({
       dateStr: `${parseInt(day, 10)} / ${parseInt(month, 10)} / ${parseInt(year, 10)}`,
       ...javaneseData,
       insight,
       pasaranInfo,
+      dinaInfo,
       watakWeton: getWatakWeton(inputDate),
       pancasuda: getPancasuda(inputDate),
       wukuLahir: getWuku(inputDate),
@@ -151,6 +153,25 @@ export default function WetonCalculatorScreen() {
                   </View>
                 </View>
               </BlurView>
+
+              {/* Kartu Info Dina (Hari) */}
+              {result.dinaInfo?.arti && (
+                <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>{result.dinaInfo.ikon}</Text>
+                    <Text style={styles.sectionTitle}>Hari {result.dina} — {result.dinaInfo.arti}</Text>
+                  </View>
+                  <Text style={styles.detailPhilosophy}>{result.dinaInfo.filosofi}</Text>
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>Watak</Text>
+                    <Text style={styles.detailSubText}>{result.dinaInfo.watak}</Text>
+                  </View>
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>Unsur · Keterangan</Text>
+                    <Text style={styles.detailSubText}>{result.dinaInfo.unsur} — {result.dinaInfo.keterangan}</Text>
+                  </View>
+                </BlurView>
+              )}
 
               {/* Kartu Info Pasaran */}
               <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
