@@ -4,7 +4,7 @@ import {
   KeyboardAvoidingView, Platform, ScrollView, Animated,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { findGoodDays, isValidDate } from '../utils/javaneseLogic';
 import { DEWASA_AYU_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';

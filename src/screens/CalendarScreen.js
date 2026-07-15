@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Animated, useWindowDimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { generateCalendarMonth, getJavaneseDate, getJavaneseCalendar, getPeruntungan, getWuku, getMangsa } from '../utils/javaneseLogic';
 import { PASARAN_INFO, PERUNTUNGAN_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';

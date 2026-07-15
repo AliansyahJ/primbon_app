@@ -4,7 +4,7 @@ import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import CalendarScreen from './src/screens/CalendarScreen';
 import WetonCalculatorScreen from './src/screens/WetonCalculatorScreen';
 import KecocokanScreen from './src/screens/KecocokanScreen';

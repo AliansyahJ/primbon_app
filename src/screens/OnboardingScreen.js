@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
 
