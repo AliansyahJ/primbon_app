@@ -195,7 +195,7 @@ npm run ios      # iOS
 - **CI hardening** (`build.yml`): `paths-ignore` (`**.md`/`.claude`/`.gitignore`/`LICENSE` skip build), `concurrency` cancel-in-progress, `cache: gradle`, artifact rename → `primbon-jawa-apk`.
 - **Belum**: lockfile (masih `--no-package-lock`, deps ngambang), signing key (masih debug key, tak bisa Play Store).
 
-### 13 Jul 2026 (lanjutan) — P7: Hari Pantangan per Weton
+### 15 Jul 2026 — P7: Hari Pantangan per Weton
 - **`getHariNaas(date)`** baru di `javaneseLogic.js` — deterministik dari weton lahir: (1) weton ulang tiap 35 hari, (2) naas "telung dinane lan telung pasarane" = dina/pasaran ke-3 hitungan inklusif (offset +2 modulo). Verified: Senin Legi → Rabu Pon.
 - Kartu "Hari Pantangan (Naas)" di `WetonCalculatorScreen` (sebelum disclaimer) + catatan varian tradisi.
 - Ekspor logic tetap murni; anchor perhitungan tak disentuh.
