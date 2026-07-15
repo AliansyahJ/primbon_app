@@ -10,6 +10,7 @@ import WetonCalculatorScreen from './src/screens/WetonCalculatorScreen';
 import KecocokanScreen from './src/screens/KecocokanScreen';
 import DewasaAyuScreen from './src/screens/DewasaAyuScreen';
 import OnboardingScreen from './src/screens/OnboardingScreen';
+import GlosariumScreen from './src/screens/GlosariumScreen';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
 import { storageGet, storageSet } from './src/utils/storage';
 
@@ -28,6 +29,7 @@ function AppContent() {
   const styles = useMemo(() => getStyles(colors), [colors]);
   const [activeTab, setActiveTab] = useState('calendar');
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showGlossary, setShowGlossary] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,6 +49,7 @@ function AppContent() {
 
   if (loading) return null;
   if (showOnboarding) return <OnboardingScreen onFinish={finishOnboarding} />;
+  if (showGlossary) return <GlosariumScreen onClose={() => setShowGlossary(false)} />;
 
   return (
     <LinearGradient
@@ -63,6 +66,15 @@ function AppContent() {
             size={20}
             color={colors.secondary}
           />
+        </TouchableOpacity>
+
+        {/* Tombol Glosarium */}
+        <TouchableOpacity
+          style={[styles.themeToggle, styles.glossaryButton]}
+          onPress={() => setShowGlossary(true)}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="help-circle-outline" size={22} color={colors.secondary} />
         </TouchableOpacity>
 
         {/* Content Area */}
@@ -141,6 +153,9 @@ const getStyles = (colors) => StyleSheet.create({
     backgroundColor: colors.cardBg,
     borderWidth: 1,
     borderColor: colors.cardBorder,
+  },
+  glossaryButton: {
+    right: 62, // di kiri tombol tema (14 + 40 + 8)
   },
   tabBarContainer: {
     position: 'absolute',
