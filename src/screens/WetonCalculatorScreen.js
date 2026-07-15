@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Animated } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
-import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, getMangsa } from '../utils/javaneseLogic';
+import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, getMangsa, getHariNaas } from '../utils/javaneseLogic';
 import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
@@ -42,6 +42,7 @@ export default function WetonCalculatorScreen() {
       pancasuda: getPancasuda(inputDate),
       wukuLahir: getWuku(inputDate),
       mangsaLahir: getMangsa(inputDate),
+      hariNaas: getHariNaas(inputDate),
     });
 
     fadeAnim.setValue(0);
@@ -410,6 +411,39 @@ export default function WetonCalculatorScreen() {
                   <View style={styles.detailSubSection}>
                     <Text style={styles.detailSubLabel}>🍀 Keberuntungan</Text>
                     <Text style={styles.detailSubText}>{result.mangsaLahir.keberuntungan}</Text>
+                  </View>
+                </BlurView>
+              )}
+
+              {/* Kartu Hari Pantangan (Naas) */}
+              {result.hariNaas && (
+                <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
+                  <View style={styles.sectionHeader}>
+                    <Text style={styles.pasaranIkon}>⛔</Text>
+                    <Text style={styles.sectionTitle}>Hari Pantangan (Naas)</Text>
+                  </View>
+                  <Text style={styles.detailPhilosophy}>
+                    Menurut tradisi, hari-hari berikut kurang baik bagi pemilik weton {result.weton} untuk memulai hajat besar (pernikahan, pindah rumah, buka usaha).
+                  </Text>
+                  <View style={styles.horoGrid}>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>🔁 Weton Ulang</Text>
+                      <Text style={styles.detailSubText}>
+                        Setiap {result.hariNaas.wetonLahir} (berulang tiap 35 hari) — hari kelahiran sendiri, baiknya untuk laku prihatin/introspeksi, bukan hajatan.
+                      </Text>
+                    </View>
+                    <View style={styles.horoItem}>
+                      <Text style={styles.detailSubLabel}>⚠️ Naas Dina & Pasaran</Text>
+                      <Text style={styles.detailSubText}>
+                        Hari {result.hariNaas.naasDina} dan pasaran {result.hariNaas.naasPasaran} (telung dinane lan telung pasarane). Paling dihindari saat keduanya bertemu: {result.hariNaas.naasKombinasi}.
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.saranBox}>
+                    <Ionicons name="bulb-outline" size={14} color={colors.secondary} />
+                    <Text style={styles.saranText}>
+                      Perhitungan naas memiliki banyak varian antar daerah dan kitab — jadikan panduan tradisi, bukan kepastian.
+                    </Text>
                   </View>
                 </BlurView>
               )}
