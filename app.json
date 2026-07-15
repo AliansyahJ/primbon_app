@@ -7,7 +7,7 @@
     "icon": "./assets/icon-wayang.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/icon-wayang.png",
       "resizeMode": "contain",
       "backgroundColor": "#1A120B"
     },
@@ -16,10 +16,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#1A120B",
         "foregroundImage": "./assets/icon-wayang.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "monochromeImage": "./assets/icon-wayang.png"
       },
       "package": "com.anonymous.kalender_jawa",
       "jsEngine": "hermes",
