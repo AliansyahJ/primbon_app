@@ -50,6 +50,17 @@ Belum diverifikasi visual via `npm run web` (perlu user).
 
 ---
 
+## 🚧 P7 — Hari Pantangan per Weton (SEDANG DIKERJAKAN)
+
+Rumus deterministik (dihitung, bukan tabel manual — hindari data karangan):
+1. **Weton ulang** — hari weton sendiri (tiap 35 hari) pantang hajat besar.
+2. **Naas telung dina + telung pasaran** — dina ke-3 & pasaran ke-3 setelah weton lahir (varian Betaljemur Adammakna yang umum).
+
+- [ ] `javaneseLogic.js` — fungsi murni `getHariNaas(date)` → `{ wetonLahir, naasKombinasi }` (tak sentuh anchor existing)
+- [ ] `WetonCalculatorScreen.js` — kartu "Hari Pantangan" (weton ulang + naas + disclaimer varian tradisi)
+
+---
+
 
 ### Build & Deploy
 - [ ] Build APK via EAS: `npx eas-cli build -p android --profile preview`

@@ -348,3 +348,32 @@ export const generateCalendarMonth = (year, month) => {
   
   return calendarDays;
 };
+
+/**
+ * Hari pantangan (naas) berdasarkan weton lahir.
+ * Dua komponen — varian yang umum dipakai (a.l. tradisi Betaljemur Adammakna):
+ * 1. Weton ulang: kombinasi dina+pasaran yang sama dengan weton lahir,
+ *    berulang tiap 35 hari. Pantang memulai hajat besar.
+ * 2. Naas "telung dinane lan telung pasarane": hari ke-3 dari dina lahir
+ *    dan pasaran ke-3 dari pasaran lahir — hitungan Jawa INKLUSIF
+ *    (hari lahir dihitung ke-1, jadi offset +2).
+ *    Contoh: lahir Senin Legi → naas dina = Rabu, naas pasaran = Pon.
+ * Catatan: tradisi naas punya banyak varian antar daerah/kitab.
+ * Sifatnya panduan, bukan kepastian.
+ * @param {Date} date - Tanggal lahir
+ * @returns {Object} { wetonLahir, naasDina, naasPasaran, naasKombinasi }
+ */
+export const getHariNaas = (date) => {
+  const jd = getJavaneseDate(date);
+  const dinaIdx = DINA_NAMES.indexOf(jd.dina);
+  // PASARAN_NAMES sudah urut siklus harian: Wage → Kliwon → Legi → Pahing → Pon
+  const pasaranIdx = PASARAN_NAMES.indexOf(jd.pasaran);
+  const naasDina = DINA_NAMES[(dinaIdx + 2) % 7];
+  const naasPasaran = PASARAN_NAMES[(pasaranIdx + 2) % 5];
+  return {
+    wetonLahir: jd.weton,
+    naasDina,
+    naasPasaran,
+    naasKombinasi: `${naasDina} ${naasPasaran}`,
+  };
+};
