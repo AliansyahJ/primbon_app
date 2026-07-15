@@ -6,7 +6,6 @@ import { generateCalendarMonth, getJavaneseDate, getJavaneseCalendar, getPeruntu
 import { PASARAN_INFO, PERUNTUNGAN_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
-import GlosariumCard from '../components/GlosariumCard';
 
 const MONTH_NAMES = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -328,10 +327,6 @@ export default function CalendarScreen() {
             })()}
           </BlurView>
         )}
-
-        <View style={{ width: '100%', maxWidth, alignSelf: 'center' }}>
-          <GlosariumCard />
-        </View>
 
       </View>
     </ScrollView>
