@@ -195,6 +195,11 @@ npm run ios      # iOS
 - **CI hardening** (`build.yml`): `paths-ignore` (`**.md`/`.claude`/`.gitignore`/`LICENSE` skip build), `concurrency` cancel-in-progress, `cache: gradle`, artifact rename → `primbon-jawa-apk`.
 - **Belum**: lockfile (masih `--no-package-lock`, deps ngambang), signing key (masih debug key, tak bisa Play Store).
 
+### 13 Jul 2026 (lanjutan) — P7: Hari Pantangan per Weton
+- **`getHariNaas(date)`** baru di `javaneseLogic.js` — deterministik dari weton lahir: (1) weton ulang tiap 35 hari, (2) naas "telung dinane lan telung pasarane" = dina/pasaran ke-3 hitungan inklusif (offset +2 modulo). Verified: Senin Legi → Rabu Pon.
+- Kartu "Hari Pantangan (Naas)" di `WetonCalculatorScreen` (sebelum disclaimer) + catatan varian tradisi.
+- Ekspor logic tetap murni; anchor perhitungan tak disentuh.
+
 ### 13 Jul 2026 (lanjutan) — Fix Tab Bar Nav Sistem (proper)
 - **Ganti pendekatan**: `react-native-safe-area-context` (~5.7.0) SEKARANG DIPAKAI — sebelumnya diblok, kini terinstal lewat `npm install --ignore-scripts` (bypass `~/.npmrc allow-scripts`).
 - `App.js`: `SafeAreaProvider` bungkus root, `useSafeAreaInsets()` → `paddingTop: insets.top` (toggle tema) + `paddingBottom: insets.bottom + 10` (tab bar). Hapus `height`/`paddingBottom` hardcode Platform. Presisi tiap perangkat, aman di web (inset 0).

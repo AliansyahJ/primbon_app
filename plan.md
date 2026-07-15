@@ -50,14 +50,15 @@ Belum diverifikasi visual via `npm run web` (perlu user).
 
 ---
 
-## 🚧 P7 — Hari Pantangan per Weton (SEDANG DIKERJAKAN)
+## ✅ P7 — Hari Pantangan per Weton (SELESAI)
 
 Rumus deterministik (dihitung, bukan tabel manual — hindari data karangan):
 1. **Weton ulang** — hari weton sendiri (tiap 35 hari) pantang hajat besar.
-2. **Naas telung dina + telung pasaran** — dina ke-3 & pasaran ke-3 setelah weton lahir (varian Betaljemur Adammakna yang umum).
+2. **Naas telung dina + telung pasaran** — dina ke-3 & pasaran ke-3 setelah weton lahir (hitungan inklusif, offset +2; varian Betaljemur Adammakna yang umum).
 
-- [ ] `javaneseLogic.js` — fungsi murni `getHariNaas(date)` → `{ wetonLahir, naasKombinasi }` (tak sentuh anchor existing)
-- [ ] `WetonCalculatorScreen.js` — kartu "Hari Pantangan" (weton ulang + naas + disclaimer varian tradisi)
+- [x] `javaneseLogic.js` — fungsi murni `getHariNaas(date)` → `{ wetonLahir, naasDina, naasPasaran, naasKombinasi }` (anchor existing tak disentuh)
+- [x] `WetonCalculatorScreen.js` — kartu "Hari Pantangan" (weton ulang + naas dina/pasaran + disclaimer varian tradisi)
+- [x] Verifikasi rumus: Senin Legi → Rabu Pon ✓, Sabtu Pon → Senin Kliwon ✓
 
 ---
 
