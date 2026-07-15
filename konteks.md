@@ -60,7 +60,7 @@ Belum ada: routing lib, testing, TypeScript, linter.
 
 ```
 primbon-app/
-├── App.js                    # Entry: ThemeProvider + SafeAreaProvider + tab bar + gate onboarding
+├── App.js                    # Entry: providers + tab bar + gate onboarding/glosarium + tombol ? & tema
 ├── index.js                  # Expo entry standar
 ├── app.json                  # Expo config (lihat §9)
 ├── eas.json                  # Profil EAS Build (development, preview APK, production AAB)
@@ -70,8 +70,8 @@ primbon-app/
 ├── .github/workflows/build.yml  # Build APK — MANUAL only (workflow_dispatch)
 ├── assets/                   # icon-wayang.png (launcher+tab), splash-icon.png, android-icon-{background,monochrome}.png
 └── src/
-    ├── components/GlosariumCard.js
-    ├── screens/ (5 file)
+    ├── components/ (kosong — GlosariumCard dihapus 16 Jul, glosarium jadi screen)
+    ├── screens/ (6 file: 4 tab + Onboarding + Glosarium)
     ├── utils/ (javaneseLogic.js, storage.js)
     ├── data/ (6 file)
     └── theme/ (theme.js, ThemeContext.js)
@@ -215,6 +215,11 @@ npm run android  # Android
 ---
 
 ## 9. Riwayat Perubahan (ringkas, terbaru dulu)
+
+### 16 Jul 2026 — P8: Glosarium Halaman Mandiri + Mulai Mentoring
+- `GlosariumScreen.js` baru — full-screen mandiri (gradient, header + tombol X, accordion per istilah). Dibuka via tombol `?` di header App.js (state `showGlossary`, gate render sebelum tab, pola sama onboarding).
+- `GlosariumCard` dicabut dari WetonCalculatorScreen & CalendarScreen, file komponen DIHAPUS — `src/components/` kosong lagi.
+- **Mode Mentor aktif** (lihat plan.md): user belajar JS dari nol. Progres: JS-1..3 lulus, JS-4 (modulo) berhenti di 3 soal terakhir.
 
 ### 15 Jul 2026 — P7: Hari Pantangan per Weton
 - `getHariNaas(date)` di javaneseLogic — weton ulang (35 hari) + naas telung dina/pasaran (offset +2 inklusif). Verified: Senin Legi → Rabu Pon.

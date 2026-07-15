@@ -116,10 +116,10 @@ Rumus deterministik (dihitung, bukan tabel manual — hindari data karangan):
 ---
 
 
-### P8 — Glosarium Halaman Mandiri (SEDANG DIKERJAKAN)
-- [ ] `src/screens/GlosariumScreen.js` baru — full-screen (gradient + header + tombol tutup), render daftar accordion dari `GLOSARIUM`
-- [ ] `App.js` — tombol `?` (help-circle) di kanan atas sebelah toggle tema, state `showGlossary`
-- [ ] Cabut `GlosariumCard` dari `WetonCalculatorScreen` + `CalendarScreen`
+### ✅ P8 — Glosarium Halaman Mandiri (SELESAI 16 Jul)
+- [x] `src/screens/GlosariumScreen.js` — full-screen (gradient + header + tombol X), accordion per istilah (kartu terpisah)
+- [x] `App.js` — tombol `?` kanan atas (kiri toggle tema, `right: 62`), state `showGlossary`, render gate sebelum tab
+- [x] Cabut dari `WetonCalculatorScreen` + `CalendarScreen`; `src/components/GlosariumCard.js` DIHAPUS (folder components kosong lagi)
 
 ### Build & Deploy
 - [ ] Build APK via EAS: `npx eas-cli build -p android --profile preview`
