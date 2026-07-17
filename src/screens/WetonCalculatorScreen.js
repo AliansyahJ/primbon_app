@@ -6,6 +6,7 @@ import { getJavaneseDate, isValidDate, getWatakWeton, getPancasuda, getWuku, get
 import { getPrimbonInsight, PASARAN_INFO, UNSUR_INFO, ARAH_INFO, WARNA_INFO, DINA_INFO } from '../data/primbonData';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
+import PantanganScreen from './PantanganScreen';
 
 export default function WetonCalculatorScreen() {
   const { colors } = useTheme();
@@ -13,6 +14,7 @@ export default function WetonCalculatorScreen() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [result, setResult] = useState(null);
+  const [showPantangan, setShowPantangan] = useState(false);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -33,6 +35,7 @@ export default function WetonCalculatorScreen() {
 
     setResult({
       dateStr: `${parseInt(day, 10)} / ${parseInt(month, 10)} / ${parseInt(year, 10)}`,
+      birthDate: inputDate,
       ...javaneseData,
       insight,
       pasaranInfo,
@@ -60,6 +63,11 @@ export default function WetonCalculatorScreen() {
       }),
     ]).start();
   };
+
+  // Halaman detail tanggal pantangan (gate render lokal, pola GlosariumScreen)
+  if (showPantangan && result) {
+    return <PantanganScreen birthDate={result.birthDate} onClose={() => setShowPantangan(false)} />;
+  }
 
   return (
     <KeyboardAvoidingView
@@ -155,6 +163,11 @@ export default function WetonCalculatorScreen() {
                 </View>
               </BlurView>
 
+              {/* ===== MAKNA KOMPONEN ===== */}
+              <View style={styles.horoskopDivider}>
+                <Text style={styles.horoskopDividerText}>✦ MAKNA KOMPONEN ✦</Text>
+              </View>
+
               {/* Kartu Info Dina (Hari) */}
               {result.dinaInfo?.arti && (
                 <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
@@ -174,12 +187,15 @@ export default function WetonCalculatorScreen() {
                 </BlurView>
               )}
 
-              {/* Kartu Info Pasaran */}
+              {/* Kartu Makna Pasaran — gabungan arti, watak pemilik, unsur, arah, warna */}
               <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
                 <View style={styles.sectionHeader}>
                   <Ionicons name="compass" size={18} color={colors.secondary} />
-                  <Text style={styles.sectionTitle}>Info Pasaran {result.pasaran}</Text>
+                  <Text style={styles.sectionTitle}>Makna Pasaran {result.pasaran}</Text>
                 </View>
+                {result.pasaranInfo.penjelasanArti && (
+                  <Text style={styles.detailPhilosophy}>{result.pasaranInfo.penjelasanArti}</Text>
+                )}
                 <View style={styles.pasaranGrid}>
                   <View style={styles.pasaranItem}>
                     <Text style={styles.pasaranItemLabel}>Arti</Text>
@@ -204,14 +220,75 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.detailSubText}>{result.pasaranInfo.watakPemilik}</Text>
                   </View>
                 )}
+                {result.pasaranInfo.keterangan && (
+                  <View style={styles.detailSubSection}>
+                    <Text style={styles.detailSubLabel}>Keterangan</Text>
+                    <Text style={styles.detailSubText}>{result.pasaranInfo.keterangan}</Text>
+                  </View>
+                )}
+
+                {UNSUR_INFO[result.pasaranInfo.unsur] && (
+                  <>
+                    <View style={styles.insightDivider} />
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.pasaranIkon}>{UNSUR_INFO[result.pasaranInfo.unsur].ikon}</Text>
+                      <Text style={styles.sectionTitle}>Unsur {result.pasaranInfo.unsur}</Text>
+                    </View>
+                    <Text style={styles.detailPhilosophy}>{UNSUR_INFO[result.pasaranInfo.unsur].filosofi}</Text>
+                    <View style={styles.detailSubSection}>
+                      <Text style={styles.detailSubLabel}>Sifat</Text>
+                      <Text style={styles.detailSubText}>{UNSUR_INFO[result.pasaranInfo.unsur].sifat}</Text>
+                    </View>
+                    <View style={styles.detailSubSection}>
+                      <Text style={styles.detailSubLabel}>Kelemahan</Text>
+                      <Text style={styles.detailSubText}>{UNSUR_INFO[result.pasaranInfo.unsur].kelemahan}</Text>
+                    </View>
+                  </>
+                )}
+
+                {ARAH_INFO[result.pasaranInfo.arah] && (
+                  <>
+                    <View style={styles.insightDivider} />
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.pasaranIkon}>{ARAH_INFO[result.pasaranInfo.arah].ikon}</Text>
+                      <Text style={styles.sectionTitle}>Arah {result.pasaranInfo.arah}</Text>
+                    </View>
+                    <Text style={styles.detailPhilosophy}>{ARAH_INFO[result.pasaranInfo.arah].filosofi}</Text>
+                    <View style={styles.detailSubSection}>
+                      <Text style={styles.detailSubLabel}>Makna</Text>
+                      <Text style={styles.detailSubText}>{ARAH_INFO[result.pasaranInfo.arah].makna}</Text>
+                    </View>
+                  </>
+                )}
+
+                {WARNA_INFO[result.pasaranInfo.warna] && (
+                  <>
+                    <View style={styles.insightDivider} />
+                    <View style={styles.sectionHeader}>
+                      <Text style={styles.pasaranIkon}>{WARNA_INFO[result.pasaranInfo.warna].ikon}</Text>
+                      <Text style={styles.sectionTitle}>Warna {result.pasaranInfo.warna}</Text>
+                    </View>
+                    <Text style={styles.detailPhilosophy}>{WARNA_INFO[result.pasaranInfo.warna].filosofi}</Text>
+                    <View style={styles.detailSubSection}>
+                      <Text style={styles.detailSubLabel}>Makna</Text>
+                      <Text style={styles.detailSubText}>{WARNA_INFO[result.pasaranInfo.warna].makna}</Text>
+                    </View>
+                  </>
+                )}
               </BlurView>
 
-              {/* Kartu Watak Primbon */}
+              {/* ===== WATAK & NASIB KELAHIRAN ===== */}
+              <View style={styles.horoskopDivider}>
+                <Text style={styles.horoskopDividerText}>✦ WATAK & NASIB KELAHIRAN ✦</Text>
+              </View>
+
+              {/* Kartu Watak Primbon (menurut neptu) */}
               <BlurView intensity={40} tint={colors.blurTint} style={[styles.card, styles.insightCard]}>
                 <View style={styles.sectionHeader}>
                   <Ionicons name="book" size={18} color={colors.secondary} />
                   <Text style={styles.sectionTitle}>Watak Primbon</Text>
                 </View>
+                <Text style={styles.sourceLabel}>Menurut hitungan neptu — 12 golongan (neptu {result.totalNeptu})</Text>
                 <Text style={styles.insightName}>{result.insight.nama}</Text>
                 <Text style={styles.insightSummary}>"{result.insight.ringkasan}"</Text>
                 <View style={styles.insightDivider} />
@@ -240,71 +317,6 @@ export default function WetonCalculatorScreen() {
                 )}
               </BlurView>
 
-              {/* Kartu Makna Pasaran */}
-              {result.pasaranInfo.penjelasanArti && (
-                <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
-                  <View style={styles.sectionHeader}>
-                    <Text style={styles.pasaranIkon}>{PASARAN_INFO[result.pasaran]?.warna ? '📜' : '📜'}</Text>
-                    <Text style={styles.sectionTitle}>Makna Pasaran {result.pasaran}</Text>
-                  </View>
-                  <Text style={styles.detailPhilosophy}>{result.pasaranInfo.penjelasanArti}</Text>
-                </BlurView>
-              )}
-
-              {/* Kartu Detail Unsur */}
-              {UNSUR_INFO[result.pasaranInfo.unsur] && (
-                <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
-                  <View style={styles.sectionHeader}>
-                    <Text style={styles.pasaranIkon}>{UNSUR_INFO[result.pasaranInfo.unsur].ikon}</Text>
-                    <Text style={styles.sectionTitle}>{UNSUR_INFO[result.pasaranInfo.unsur].nama}</Text>
-                  </View>
-                  <Text style={styles.detailPhilosophy}>{UNSUR_INFO[result.pasaranInfo.unsur].filosofi}</Text>
-                  <View style={styles.detailSubSection}>
-                    <Text style={styles.detailSubLabel}>Sifat</Text>
-                    <Text style={styles.detailSubText}>{UNSUR_INFO[result.pasaranInfo.unsur].sifat}</Text>
-                  </View>
-                  <View style={styles.detailSubSection}>
-                    <Text style={styles.detailSubLabel}>Kelemahan</Text>
-                    <Text style={styles.detailSubText}>{UNSUR_INFO[result.pasaranInfo.unsur].kelemahan}</Text>
-                  </View>
-                </BlurView>
-              )}
-
-              {/* Kartu Detail Arah & Warna */}
-              {ARAH_INFO[result.pasaranInfo.arah] && (
-                <BlurView intensity={20} tint={colors.blurTint} style={styles.card}>
-                  <View style={styles.sectionHeader}>
-                    <Text style={styles.pasaranIkon}>{ARAH_INFO[result.pasaranInfo.arah].ikon}</Text>
-                    <Text style={styles.sectionTitle}>{ARAH_INFO[result.pasaranInfo.arah].nama}</Text>
-                  </View>
-                  <Text style={styles.detailPhilosophy}>{ARAH_INFO[result.pasaranInfo.arah].filosofi}</Text>
-                  <View style={styles.detailSubSection}>
-                    <Text style={styles.detailSubLabel}>Makna</Text>
-                    <Text style={styles.detailSubText}>{ARAH_INFO[result.pasaranInfo.arah].makna}</Text>
-                  </View>
-
-                  {WARNA_INFO[result.pasaranInfo.warna] && (
-                    <>
-                      <View style={styles.insightDivider} />
-                      <View style={styles.sectionHeader}>
-                        <Text style={styles.pasaranIkon}>{WARNA_INFO[result.pasaranInfo.warna].ikon}</Text>
-                        <Text style={styles.sectionTitle}>Warna {result.pasaranInfo.warna}</Text>
-                      </View>
-                      <Text style={styles.detailPhilosophy}>{WARNA_INFO[result.pasaranInfo.warna].filosofi}</Text>
-                      <View style={styles.detailSubSection}>
-                        <Text style={styles.detailSubLabel}>Makna</Text>
-                        <Text style={styles.detailSubText}>{WARNA_INFO[result.pasaranInfo.warna].makna}</Text>
-                      </View>
-                    </>
-                  )}
-                </BlurView>
-              )}
-
-              {/* ===== HOROSKOP JAWA ===== */}
-              <View style={styles.horoskopDivider}>
-                <Text style={styles.horoskopDividerText}>✦ HOROSKOP JAWA ✦</Text>
-              </View>
-
               {/* Kartu Watak Weton (35 Weton) */}
               {result.watakWeton && (
                 <BlurView intensity={20} tint={colors.blurTint} style={[styles.card, styles.horoskopCard]}>
@@ -312,6 +324,7 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.pasaranIkon}>🔮</Text>
                     <Text style={styles.sectionTitle}>Watak Weton {result.weton}</Text>
                   </View>
+                  <Text style={styles.sourceLabel}>Menurut kombinasi 35 weton (dina × pasaran)</Text>
                   <Text style={styles.detailPhilosophy}>{result.watakWeton.watak}</Text>
                   <View style={styles.horoGrid}>
                     <View style={styles.horoItem}>
@@ -351,6 +364,7 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.pasaranIkon}>{result.pancasuda.ikon}</Text>
                     <Text style={styles.sectionTitle}>Pancasuda</Text>
                   </View>
+                  <Text style={styles.sourceLabel}>Menurut siklus 7 nasib dari total neptu</Text>
                   <Text style={[styles.insightName, { color: result.pancasuda.baik ? colors.secondary : '#E67E22' }]}>
                     {result.pancasuda.nama}
                   </Text>
@@ -375,6 +389,7 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.pasaranIkon}>🗓️</Text>
                     <Text style={styles.sectionTitle}>Wuku Lahir — {result.wukuLahir.nama}</Text>
                   </View>
+                  <Text style={styles.sourceLabel}>Menurut siklus Pawukon 210 hari</Text>
                   <Text style={styles.wukuDewaText}>Pelindung: {result.wukuLahir.dewa}</Text>
                   <Text style={styles.detailPhilosophy}>{result.wukuLahir.deskripsi}</Text>
                   <View style={styles.horoGrid}>
@@ -405,6 +420,7 @@ export default function WetonCalculatorScreen() {
                     <Text style={styles.pasaranIkon}>{result.mangsaLahir.ikon}</Text>
                     <Text style={styles.sectionTitle}>Zodiak Mangsa — {result.mangsaLahir.nama}</Text>
                   </View>
+                  <Text style={styles.sourceLabel}>Menurut Pranata Mangsa — musim saat kelahiran</Text>
                   <Text style={styles.wukuDewaText}>{result.mangsaLahir.rentang} · Elemen {result.mangsaLahir.elemen}</Text>
                   <Text style={styles.detailPhilosophy}>{result.mangsaLahir.watak}</Text>
                   <View style={styles.detailSubSection}>
@@ -413,6 +429,11 @@ export default function WetonCalculatorScreen() {
                   </View>
                 </BlurView>
               )}
+
+              {/* ===== HARI PANTANGAN ===== */}
+              <View style={styles.horoskopDivider}>
+                <Text style={styles.horoskopDividerText}>✦ HARI PANTANGAN ✦</Text>
+              </View>
 
               {/* Kartu Hari Pantangan (Naas) */}
               {result.hariNaas && (
@@ -444,6 +465,14 @@ export default function WetonCalculatorScreen() {
                       Perhitungan naas memiliki banyak varian antar daerah dan kitab — jadikan panduan tradisi, bukan kepastian.
                     </Text>
                   </View>
+                  <TouchableOpacity
+                    style={styles.pantanganButton}
+                    onPress={() => setShowPantangan(true)}
+                    activeOpacity={0.8}
+                  >
+                    <Ionicons name="calendar" size={16} color="#1A120B" style={styles.buttonIcon} />
+                    <Text style={styles.pantanganButtonText}>Lihat Tanggal Pantangan 90 Hari</Text>
+                  </TouchableOpacity>
                 </BlurView>
               )}
 
@@ -636,6 +665,28 @@ const getStyles = (colors) => StyleSheet.create({
     marginLeft: 8,
     textTransform: 'uppercase',
     letterSpacing: 1,
+  },
+  sourceLabel: {
+    fontSize: 11,
+    color: colors.textLight,
+    fontStyle: 'italic',
+    marginTop: -10,
+    marginBottom: 12,
+  },
+  pantanganButton: {
+    backgroundColor: colors.secondary,
+    height: 48,
+    borderRadius: 14,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 14,
+  },
+  pantanganButtonText: {
+    color: '#1A120B',
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 0.5,
   },
   pasaranGrid: {
     flexDirection: 'row',
