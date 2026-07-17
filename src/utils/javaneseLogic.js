@@ -468,3 +468,78 @@ export const getHariNaas = (date) => {
     naasKombinasi: `${naasDina} ${naasPasaran}`,
   };
 };
+
+/**
+ * Cari tanggal-tanggal pantangan (naas) konkret dalam rentang, berdasar weton lahir.
+ * Kembaran findGoodDays versi negatif. Dua jenis (lihat getHariNaas):
+ * - 'Weton Ulang'    : dina+pasaran sama dgn weton lahir (tiap 35 hari)
+ * - 'Naas Kombinasi' : telung dinane lan telung pasarane bertemu (tiap 35 hari)
+ * @param {Date} birthDate - tanggal lahir
+ * @param {Date} startDate - awal pencarian
+ * @param {Date} endDate - akhir pencarian (inklusif)
+ * @returns {Array} list {date, javanese, jenis, alasan} urut tanggal menaik
+ */
+export const findBadDays = (birthDate, startDate, endDate) => {
+  const lahir = getJavaneseDate(birthDate);
+  const naas = getHariNaas(birthDate);
+  const results = [];
+  const cursor = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const end = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+
+  while (cursor <= end) {
+    const date = new Date(cursor);
+    const jd = getJavaneseDate(date);
+    if (jd.weton === lahir.weton) {
+      results.push({
+        date,
+        javanese: jd,
+        jenis: 'Weton Ulang',
+        alasan: `Sama dengan weton lahir (${lahir.weton}) — menurut tradisi baiknya untuk introspeksi/laku prihatin, bukan memulai hajat besar.`,
+      });
+    } else if (jd.weton === naas.naasKombinasi) {
+      results.push({
+        date,
+        javanese: jd,
+        jenis: 'Naas Kombinasi',
+        alasan: `Telung dinane lan telung pasarane dari weton ${lahir.weton} — dina ${naas.naasDina} bertemu pasaran ${naas.naasPasaran}.`,
+      });
+    }
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return results;
+};
+
+/**
+ * Nasib SEMUA 35 weton pada suatu tanggal — untuk halaman Cek Nasib dari kalender.
+ * Gabungan = (neptu weton + neptu tanggal) % 7 → PERUNTUNGAN_INFO (rumus sama
+ * dgn cek "selaras weton" di findGoodDays).
+ * Flag per weton:
+ * - isWetonUlang : tanggal ini = weton orang itu sendiri
+ * - isNaas       : naas kombinasi weton itu (offset +2 dina & +2 pasaran, inklusif)
+ *                  jatuh tepat di tanggal ini
+ * @param {Date} date - tanggal yang dicek
+ * @returns {Array} 35 entri {weton, totalNeptu, gabungan, peruntungan, isWetonUlang, isNaas}
+ */
+export const getNasibSemuaWeton = (date) => {
+  const target = getJavaneseDate(date);
+  const targetDinaIdx = DINA_NAMES.indexOf(target.dina);
+  const targetPasaranIdx = PASARAN_NAMES.indexOf(target.pasaran);
+
+  const results = [];
+  for (let d = 0; d < 7; d++) {
+    for (let p = 0; p < 5; p++) {
+      const totalNeptu = DINA_NEPTU[d] + PASARAN_NEPTU[p];
+      const gabungan = (totalNeptu + target.totalNeptu) % 7;
+      results.push({
+        weton: `${DINA_NAMES[d]} ${PASARAN_NAMES[p]}`,
+        totalNeptu,
+        gabungan,
+        peruntungan: PERUNTUNGAN_INFO[gabungan],
+        isWetonUlang: d === targetDinaIdx && p === targetPasaranIdx,
+        isNaas: (d + 2) % 7 === targetDinaIdx && (p + 2) % 5 === targetPasaranIdx,
+      });
+    }
+  }
+  return results;
+};
