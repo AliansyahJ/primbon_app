@@ -41,7 +41,7 @@ Mangsa) secara **100% offline** — tanpa backend, database, atau API. Semua per
 | Entry | `index.js` → `App.js` |
 | Navigasi | **Custom tab bar** di `App.js` (state `activeTab`; BUKAN react-navigation) |
 | UI | Glassmorphism: `expo-blur` (BlurView) + `expo-linear-gradient` + `Animated` API |
-| Ikon | `@expo/vector-icons` (Ionicons) + `assets/icon-wayang.png` (tab bar) |
+| Ikon | Ionicons via subpath `@expo/vector-icons/Ionicons` (JANGAN barrel — bundle 19 font) + `icon-wayang.png` (tab bar) |
 | Safe area | `react-native-safe-area-context` ~5.7.0 (`useSafeAreaInsets`) |
 | Web | `react-native-web` ^0.21.2 |
 | State | `useState`/`useRef` lokal per screen + `ThemeContext` global |
@@ -68,7 +68,7 @@ primbon-app/
 ├── konteks.md                # File ini
 ├── AGENTS.md / CLAUDE.md     # Instruksi: baca docs Expo v57
 ├── .github/workflows/build.yml  # Build APK — MANUAL only (workflow_dispatch)
-├── assets/                   # icon-wayang.png (launcher+tab), splash-icon.png, android-icon-{background,monochrome}.png
+├── assets/                   # 1 file: icon-wayang.png (launcher/splash/adaptiveIcon/favicon/tab)
 └── src/
     ├── components/ (kosong — GlosariumCard dihapus 16 Jul, glosarium jadi screen)
     ├── screens/ (6 file: 4 tab + Onboarding + Glosarium)
@@ -95,7 +95,9 @@ Export (signature → return):
 |---|---|
 | `isValidDate(y,m,d)` | boolean; tolak 30 Feb dll; dipakai SEMUA form |
 | `getJavaneseDate(date)` | `{dina, pasaran, neptuDina, neptuPasaran, totalNeptu, weton}` — pasaran = `daysSinceEpoch % 5` (epoch 1 Jan 1970 = Wage), dina = `date.getDay()` |
-| `getJavaneseCalendar(date)` | `{bulanJawa, tahunAJ, hariJawa, namaWindu}` — Gregorian→JD→Hijri tabular; AJ = AH + 512; windu = `(tahunAJ-1) % 8` |
+| `getJavaneseCalendar(date)` | `{bulanJawa, bulanIndex, tahunAJ, hariJawa, namaWindu}` — Gregorian→JD→Hijri tabular; AJ = AH + 512; windu = `(tahunAJ-1) % 8` |
+| `getJavaneseMonthStart(tahunAJ, idx)` | Date Masehi hari-1 bulan Jawa (idx 0=Suro..11=Besar) — via `hijriToJD` (inverse tabular, internal) + `jdToGregorian` (Fliegel–Van Flandern, internal); round-trip diverifikasi 1900–2100 |
+| `generateJavaneseMonth(tahunAJ, idx)` | array sel `{date (Masehi), day (tgl JAWA 1..29/30), isCurrentMonth, javanese}` + padding minggu 7 kolom — kembaran `generateCalendarMonth` utk mode Jawa |
 | `getPeruntungan(date)` | number 0–6 = `totalNeptu % 7` → key `PERUNTUNGAN_INFO` |
 | `calculatePadangan(d1,d2)` | `{sisa (mod 9), totalNeptu, neptuPria, neptuWanita, wetonPria, wetonWanita}` |
 | `getMangsa(date)` | entri `PRANATA_MANGSA` aktif — cari via `startDoy <= dayOfYear`; sebelum mangsa pertama = mangsa terakhir (lintas tahun); leap-year aware |
@@ -113,7 +115,7 @@ Export (signature → return):
 - Semua konversi pakai **UTC** (`Date.UTC`) hindari off-by-one timezone.
 
 ### src/utils/storage.js
-`storageGet(key)` / `storageSet(key, value)` — async. Web: `window.localStorage`. Native: object memory (hilang saat app tutup — KNOWN LIMITATION, tema & onboarding tak persist di native). Ganti implementasi di file ini saja bila kelak pakai async-storage. Key terpakai: `theme_mode`, `onboarding_seen`.
+`storageGet(key)` / `storageSet(key, value)` — async. Web: `window.localStorage`. Native: object memory (hilang saat app tutup — KNOWN LIMITATION, tema & onboarding tak persist di native). Ganti implementasi di file ini saja bila kelak pakai async-storage. Key terpakai: `theme_mode`, `onboarding_seen`, `calendar_mode`.
 
 ### src/data/primbonData.js — export:
 - `UNSUR_INFO` (5: Api/Bumi/Angin/Air/Ether) — `{nama, ikon, filosofi, sifat, kelemahan}`
@@ -141,21 +143,19 @@ Export (signature → return):
 - `theme.js`: `darkColors` (default; bg #1A120B, emas #D4AF37, krem #D5BDAF) + `lightColors` (cream; emas gelap #B8860B) + `palettes` + `typography` (title 28/800, subtitle 16/500, body 14). Token per palet: background, surface, primary, secondary, text, textLight, border, pasaranText, holidayText, todayBackground, gradientStart/End, cardBg, cardBorder, inputBg, blurTint.
 - `ThemeContext.js`: `ThemeProvider` + `useTheme()` → `{mode, colors, toggleMode}`. Persist ke storage key `theme_mode`.
 
-### src/components/GlosariumCard.js
-Kartu accordion "Apa Itu Istilah Ini?" — self-contained (punya `useTheme` sendiri, tanpa prop). Map `GLOSARIUM`, satu terbuka (state `openIndex`), `LayoutAnimation` (+ enable eksperimental Android). Dipasang di WetonCalculatorScreen (paling bawah) + CalendarScreen (paling bawah).
-
 ### src/screens/ — struktur per screen
 
 **CalendarScreen.js** (Tab 1 Kalender)
-- State: `currentDate`, `calendarDays`, `selectedDay`, `fadeAnim`. `maxWidth` = min(width, 500).
+- State: `currentDate`, `calendarDays`, `selectedDay`, `fadeAnim`, `mode` ('masehi'|'jawa', persist key `calendar_mode`), `showPicker`, `pickerYear`. `maxWidth` = min(width, 500).
 - Bagian atas: kartu "Hari Ini" — weton, neptu, unsur/arah, peruntungan (`getPeruntungan`), wuku+dewa, mangsa.
-- Grid: header nav bulan (chevron prev/next + nama bulan Masehi + bulan Jawa/tahun AJ via `getJavaneseCalendar`), 7 kolom, sel = tanggal + pasaran, hari ini di-highlight emas.
+- **Toggle segmented Masehi|Jawa** di atas nav bulan. Mode jawa: grid per bulan Jawa (`generateJavaneseMonth`), header = bulan Jawa + tahun AJ + windu + rentang Masehi, chevron iterasi bulan Jawa (Besar→Suro tahun+1 via `getJavaneseMonthStart`), sel = tgl Jawa besar + tgl Masehi kecil (d/m) + pasaran, disclaimer hisab tabular ±1 hari.
+- **Picker bulan/tahun**: tap area nama bulan → panel ganti grid (baris tahun chevron ±1, grid 12 bulan, tombol "Hari Ini"). Batas 1900–2100 M / 1830–2036 AJ. Mode jawa → pilih tahun AJ + bulan Jawa.
+- Grid: header nav bulan (chevron prev/next + nama bulan Masehi + bulan Jawa/tahun AJ via `getJavaneseCalendar`), 7 kolom, sel = tanggal + pasaran, hari ini di-highlight emas. Seleksi sel dibanding pakai `date.getTime()` (aman lintas bulan Masehi di mode jawa).
 - Tap tanggal → detail card: tanggal Masehi + Jawa (hariJawa bulanJawa tahunAJ AJ · windu), weton, neptu (rincian), arti pasaran, unsur, **Makna Hari (DINA_INFO: ikon arti unsur filosofi)**, Makna Pasaran (penjelasanArti), kotak Peruntungan (warna border merah bila buruk), kotak Wuku (urutan/hariKe/nama/dewa/deskripsi), kotak Mangsa.
-- Paling bawah: `GlosariumCard`.
 
 **WetonCalculatorScreen.js** (Tab 2 Cek Weton)
 - Input DD/MM/YYYY → `calculateWeton()` → validasi `isValidDate` → set `result` (spread `getJavaneseDate` + insight + pasaranInfo + dinaInfo + watakWeton + pancasuda + wukuLahir + mangsaLahir + hariNaas) → animasi fade+slide.
-- **Urutan kartu hasil**: (1) Weton utama + stats neptu; (2) Info Dina [ikon arti, filosofi, watak, unsur·keterangan]; (3) Info Pasaran [grid arti/unsur/arah/warna + watakPemilik]; (4) Watak Primbon [neptuWatak: nama, ringkasan, detail + horoGrid rejeki/jodoh/karier + saranBox]; (5) Makna Pasaran; (6) Detail Unsur; (7) Detail Arah & Warna; (8) divider "✦ HOROSKOP JAWA ✦"; (9) Watak Weton 35 [watak + rejeki/jodoh/karier + kelebihan/kekurangan (plusBox/minusBox) + saran]; (10) Pancasuda [nama diwarnai baik/buruk]; (11) Wuku Lahir [dewa, deskripsi, bakat/keberuntungan/pantangan/pohon·burung]; (12) Zodiak Mangsa; (13) **Hari Pantangan (Naas)** [weton ulang + naas dina&pasaran + saranBox disclaimer]; (14) disclaimer; (15) GlosariumCard.
+- **Urutan kartu hasil**: (1) Weton utama + stats neptu; (2) Info Dina [ikon arti, filosofi, watak, unsur·keterangan]; (3) Info Pasaran [grid arti/unsur/arah/warna + watakPemilik]; (4) Watak Primbon [neptuWatak: nama, ringkasan, detail + horoGrid rejeki/jodoh/karier + saranBox]; (5) Makna Pasaran; (6) Detail Unsur; (7) Detail Arah & Warna; (8) divider "✦ HOROSKOP JAWA ✦"; (9) Watak Weton 35 [watak + rejeki/jodoh/karier + kelebihan/kekurangan (plusBox/minusBox) + saran]; (10) Pancasuda [nama diwarnai baik/buruk]; (11) Wuku Lahir [dewa, deskripsi, bakat/keberuntungan/pantangan/pohon·burung]; (12) Zodiak Mangsa; (13) **Hari Pantangan (Naas)** [weton ulang + naas dina&pasaran + saranBox disclaimer]; (14) disclaimer.
 
 **KecocokanScreen.js** (Tab 3 Kecocokan)
 - Helper `DateInput` di luar komponen — terima `styles` + `colors` via prop (konvensi!).
@@ -198,8 +198,8 @@ npm run android  # Android
 ## 7. app.json — poin penting
 
 - `icon` & `web.favicon`: `./assets/icon-wayang.png`
-- `splash`: `./assets/splash-icon.png`, bg `#1A120B`
-- `android.adaptiveIcon`: foreground `icon-wayang.png`, background & monochrome masih file android-icon-*.png
+- `splash`: `./assets/icon-wayang.png`, bg `#1A120B`
+- `android.adaptiveIcon`: foreground + monochrome `icon-wayang.png`, background = warna solid `#1A120B`
 - `android.package`: `com.anonymous.kalender_jawa` — **JANGAN ganti** (putus identitas EAS/kredensial)
 - Hermes + ProGuard + shrinkResources aktif; `userInterfaceStyle: automatic`
 - `extra.eas.projectId`: 3926df7b-1add-4f64-b73c-483f9ba8f380
@@ -208,13 +208,28 @@ npm run android  # Android
 
 ## 8. Status & Sisa Pekerjaan
 
-**SELESAI:** P1–P5 (kalender, weton, kecocokan, peruntungan, bulan/tahun Jawa, dewasa ayu, wuku, mangsa, tema, onboarding, horoskop lengkap) · P6 (perkaya data: DINA_INFO, neptuWatak+, PASARAN_INFO+, glosarium) · P7 (hari pantangan/naas) · icon wayang · fix react-dom mismatch · safe-area tab bar · CI manual.
+**SELESAI:** P1–P5 (kalender, weton, kecocokan, peruntungan, bulan/tahun Jawa, dewasa ayu, wuku, mangsa, tema, onboarding, horoskop lengkap) · P6 (perkaya data: DINA_INFO, neptuWatak+, PASARAN_INFO+, glosarium) · P7 (hari pantangan/naas) · P10 (picker bulan/tahun + mode kalender Jawa penuh) · P11 (Weton Runtut + PantanganScreen + NasibScreen + restruktur WetonCalculatorScreen) · icon wayang · fix react-dom mismatch · safe-area tab bar · CI manual.
 
-**SISA (lihat plan.md):** build APK rilis (signing key buat Play Store), deploy web Vercel/Netlify, notifikasi harian (butuh expo-notifications), animasi transisi antar tab, lockfile (deps masih ngambang), persistensi native (storage masih memory).
+**SISA (lihat plan.md):** verifikasi visual `npm run web` (P10+P11) → 8 commit granular → build APK rilis (signing key buat Play Store), deploy web Vercel/Netlify, notifikasi harian (butuh expo-notifications), animasi transisi antar tab, lockfile (deps masih ngambang), persistensi native (storage masih memory).
 
 ---
 
 ## 9. Riwayat Perubahan (ringkas, terbaru dulu)
+
+### 17 Jul 2026 — P10: Kalender Lanjutan (picker + mode Jawa) + P11: Weton Runtut + Pantangan Detail + Cek Nasib
+- `javaneseLogic.js`: `hijriToJD` (inverse tabular) + `jdToGregorian` (Fliegel–Van Flandern); export baru `getJavaneseMonthStart`, `generateJavaneseMonth`, `findBadDays`, `getNasibSemuaWeton`; `getJavaneseCalendar` + `bulanIndex`. Verifikasi node: round-trip 1900–2100 (73k hari), anchor 1 Suro 1957 AJ = 19 Jul 2023, panjang bulan 29/30, grid 24 bulan align ✓; `findBadDays` & `getNasibSemuaWeton` lolos verifikasi logika.
+- `CalendarScreen.js`: toggle Masehi|Jawa (persist `calendar_mode`), picker bulan+tahun, mode jawa render grid per bulan Jawa + disclaimer hisab tabular; fix seleksi sel `getDate()` → `getTime()`.
+- `WetonCalculatorScreen.js`: restruktur kartu (divider 3 bagian, 4 kartu pasaran → 1 kartu "Makna Pasaran", label sumber hitungan per kartu), kartu "Hari Pantangan" + tombol ke `PantanganScreen`.
+- `src/screens/PantanganScreen.js` — full-screen list 90 hari (weton ulang + naas kombinasi tiap 35 hari).
+- `src/screens/NasibScreen.js` — 35 weton per tanggal, kelompok Selaras/Kurang Selaras, badge pantangan.
+- konteks.md dibersihkan dari sisa P8/P9 (GlosariumCard, aset lama).
+- **PENDING**: verifikasi visual via `npm run web` (P10 + P11 sekaligus) → baru 8 commit granular + build APK.
+
+### 16 Jul 2026 — P9: Diet APK
+- **Font ikon**: import barrel `@expo/vector-icons` bundle SEMUA 19 font (~4MB, dibuktikan `expo export`). Fix: subpath `import Ionicons from '@expo/vector-icons/Ionicons'` di 7 file → cuma Ionicons.ttf 390KB. Hemat ~3.6MB. ATURAN: JANGAN import dari barrel `@expo/vector-icons` — selalu subpath.
+- **Aset**: semua gambar (launcher/splash/adaptiveIcon fg+mono/favicon) → `icon-wayang.png`; adaptive bg = solid `#1A120B`; 3 PNG lama dihapus. `assets/` kini 1 file.
+- **expo-dev-client** dibuang dari dependencies — dev harian pakai Expo Go. (User perlu `npm install` ulang buat sinkron node_modules.)
+- Konteks user: awalnya minta ganti Node→Bun buat ngecilin APK — diluruskan: runtime dev tak masuk APK, yang jalan di HP itu Hermes.
 
 ### 16 Jul 2026 — P8: Glosarium Halaman Mandiri + Mulai Mentoring
 - `GlosariumScreen.js` baru — full-screen mandiri (gradient, header + tombol X, accordion per istilah). Dibuka via tombol `?` di header App.js (state `showGlossary`, gate render sebelum tab, pola sama onboarding).
