@@ -102,6 +102,48 @@ const jdToHijri = (jd) => {
 };
 
 /**
+ * Konversi tanggal Hijriah (kalender tabular) ke Julian Day Number.
+ * Inverse dari jdToHijri — epoch sama (JD 1948440 = 1 Muharram 1 AH).
+ * Diverifikasi round-trip terhadap jdToHijri (lihat plan.md P10).
+ */
+const hijriToJD = (year, month, day) =>
+  day + Math.ceil(29.5 * (month - 1)) + (year - 1) * 354 +
+  Math.floor((3 + 11 * year) / 30) + 1948440 - 1;
+
+/**
+ * Konversi Julian Day Number ke tanggal Gregorian (Fliegel–Van Flandern).
+ * Inverse dari gregorianToJD.
+ */
+const jdToGregorian = (jd) => {
+  let l = jd + 68569;
+  const n = Math.floor((4 * l) / 146097);
+  l = l - Math.floor((146097 * n + 3) / 4);
+  const i = Math.floor((4000 * (l + 1)) / 1461001);
+  l = l - Math.floor((1461 * i) / 4) + 31;
+  const j = Math.floor((80 * l) / 2447);
+  const day = l - Math.floor((2447 * j) / 80);
+  l = Math.floor(j / 11);
+  const month = j + 2 - 12 * l;
+  const year = 100 * (n - 49) + i + l;
+  return { year, month, day };
+};
+
+/** JD → objek Date lokal (jam 00:00) */
+const jdToDate = (jd) => {
+  const g = jdToGregorian(jd);
+  return new Date(g.year, g.month - 1, g.day);
+};
+
+/**
+ * Tanggal Masehi hari pertama suatu bulan Jawa.
+ * @param {number} tahunAJ - tahun Anno Javanico (= AH + 512)
+ * @param {number} monthIndex - 0 (Suro) .. 11 (Besar)
+ * @returns {Date}
+ */
+export const getJavaneseMonthStart = (tahunAJ, monthIndex) =>
+  jdToDate(hijriToJD(tahunAJ - 512, monthIndex + 1, 1));
+
+/**
  * Mendapatkan bulan Jawa, tahun AJ, dan nama windu dari tanggal Masehi
  * Offset: tahun Jawa (AJ) = tahun Hijriah (AH) + 512
  * Referensi: 1 Suro 1957 AJ = 19 Juli 2023 = 1 Muharram 1445 AH → offset = 1957 - 1445 = 512
@@ -114,6 +156,7 @@ export const getJavaneseCalendar = (date) => {
   const tahunAJ = hYear + 512;
   return {
     bulanJawa: BULAN_JAWA[hMonth - 1],
+    bulanIndex: hMonth - 1,
     tahunAJ,
     hariJawa: hDay,
     namaWindu: WINDU_NAMES[(tahunAJ - 1) % 8],
@@ -346,6 +389,54 @@ export const generateCalendarMonth = (year, month) => {
     });
   }
   
+  return calendarDays;
+};
+
+/**
+ * Membuat list tanggal untuk kalender bulanan JAWA (mode Jawa penuh).
+ * Struktur sel sama dengan generateCalendarMonth, tapi `day` = tanggal Jawa
+ * (1..29/30) dan batas bulan = bulan Jawa (Suro..Besar).
+ * Panjang bulan dihitung dari selisih JD awal bulan (29 atau 30 hari).
+ * @param {number} tahunAJ - tahun Anno Javanico
+ * @param {number} monthIndex - 0 (Suro) .. 11 (Besar)
+ * @returns {Array} List object hari { date, day, isCurrentMonth, javanese }
+ */
+export const generateJavaneseMonth = (tahunAJ, monthIndex) => {
+  const hYear = tahunAJ - 512;
+  const hMonth = monthIndex + 1;
+  const jdStart = hijriToJD(hYear, hMonth, 1);
+  const jdNext = hMonth === 12 ? hijriToJD(hYear + 1, 1, 1) : hijriToJD(hYear, hMonth + 1, 1);
+  const daysInMonth = jdNext - jdStart; // 29 atau 30
+
+  const makeCell = (jd, isCurrentMonth) => {
+    const date = jdToDate(jd);
+    return {
+      date,
+      day: jdToHijri(jd).day, // tanggal Jawa (padding ikut bulan sebelah)
+      isCurrentMonth,
+      javanese: getJavaneseDate(date),
+    };
+  };
+
+  const calendarDays = [];
+
+  // Padding bulan Jawa sebelumnya (align kolom minggu)
+  const startingDayOfWeek = jdToDate(jdStart).getDay();
+  for (let i = startingDayOfWeek; i > 0; i--) {
+    calendarDays.push(makeCell(jdStart - i, false));
+  }
+
+  // Hari-hari bulan Jawa berjalan
+  for (let i = 0; i < daysInMonth; i++) {
+    calendarDays.push(makeCell(jdStart + i, true));
+  }
+
+  // Padding bulan Jawa berikutnya
+  const remainingSlots = (7 - (calendarDays.length % 7)) % 7;
+  for (let i = 0; i < remainingSlots; i++) {
+    calendarDays.push(makeCell(jdNext + i, false));
+  }
+
   return calendarDays;
 };
 
