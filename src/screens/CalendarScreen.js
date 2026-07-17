@@ -2,15 +2,18 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Animated, useWindowDimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { generateCalendarMonth, getJavaneseDate, getJavaneseCalendar, getPeruntungan, getWuku, getMangsa } from '../utils/javaneseLogic';
-import { PASARAN_INFO, PERUNTUNGAN_INFO, DINA_INFO } from '../data/primbonData';
+import { generateCalendarMonth, generateJavaneseMonth, getJavaneseMonthStart, getJavaneseDate, getJavaneseCalendar, getPeruntungan, getWuku, getMangsa } from '../utils/javaneseLogic';
+import { PASARAN_INFO, PERUNTUNGAN_INFO, DINA_INFO, BULAN_JAWA } from '../data/primbonData';
+import { storageGet, storageSet } from '../utils/storage';
 import { typography } from '../theme/theme';
 import { useTheme } from '../theme/ThemeContext';
+import NasibScreen from './NasibScreen';
 
 const MONTH_NAMES = [
   'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
+const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 const DAY_NAMES = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
 export default function CalendarScreen() {
@@ -20,6 +23,15 @@ export default function CalendarScreen() {
   const [calendarDays, setCalendarDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [fadeAnim] = useState(new Animated.Value(1));
+  const [mode, setMode] = useState('masehi'); // 'masehi' | 'jawa'
+  const [showPicker, setShowPicker] = useState(false);
+  const [pickerYear, setPickerYear] = useState(new Date().getFullYear());
+  const [nasibDate, setNasibDate] = useState(null);
+
+  // Bulan Jawa berjalan — dipakai mode jawa (header, navigasi, picker)
+  const jawaCal = getJavaneseCalendar(currentDate);
+  // Batas picker: konversi tabular diverifikasi utk 1900–2100 M (≈ 1830–2036 AJ)
+  const yearBounds = mode === 'jawa' ? { min: 1830, max: 2036 } : { min: 1900, max: 2100 };
 
   const maxWidth = width > 500 ? 500 : width;
 
@@ -32,12 +44,20 @@ export default function CalendarScreen() {
   const todayMangsa = getMangsa(new Date());
 
   useEffect(() => {
+    storageGet('calendar_mode').then((saved) => {
+      if (saved === 'jawa') setMode('jawa');
+    });
+  }, []);
+
+  useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 120,
       useNativeDriver: true,
     }).start(() => {
-      const days = generateCalendarMonth(currentDate.getFullYear(), currentDate.getMonth());
+      const days = mode === 'jawa'
+        ? generateJavaneseMonth(jawaCal.tahunAJ, jawaCal.bulanIndex)
+        : generateCalendarMonth(currentDate.getFullYear(), currentDate.getMonth());
       setCalendarDays(days);
       setSelectedDay(null);
       Animated.timing(fadeAnim, {
@@ -46,16 +66,64 @@ export default function CalendarScreen() {
         useNativeDriver: true,
       }).start();
     });
-  }, [currentDate]);
+  }, [currentDate, mode]);
 
   const styles = useMemo(() => getStyles(colors), [colors]);
 
   const goToPrevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    if (mode === 'jawa') {
+      const idx = jawaCal.bulanIndex - 1;
+      setCurrentDate(idx < 0
+        ? getJavaneseMonthStart(jawaCal.tahunAJ - 1, 11)
+        : getJavaneseMonthStart(jawaCal.tahunAJ, idx));
+    } else {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
+    }
   };
 
   const goToNextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    if (mode === 'jawa') {
+      const idx = jawaCal.bulanIndex + 1;
+      setCurrentDate(idx > 11
+        ? getJavaneseMonthStart(jawaCal.tahunAJ + 1, 0)
+        : getJavaneseMonthStart(jawaCal.tahunAJ, idx));
+    } else {
+      setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    }
+  };
+
+  const switchMode = (next) => {
+    if (next === mode) return;
+    setMode(next);
+    setShowPicker(false);
+    storageSet('calendar_mode', next);
+  };
+
+  const togglePicker = () => {
+    if (!showPicker) {
+      setPickerYear(mode === 'jawa' ? jawaCal.tahunAJ : currentDate.getFullYear());
+    }
+    setShowPicker(!showPicker);
+  };
+
+  const pickMonth = (monthIndex) => {
+    setCurrentDate(mode === 'jawa'
+      ? getJavaneseMonthStart(pickerYear, monthIndex)
+      : new Date(pickerYear, monthIndex, 1));
+    setShowPicker(false);
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
+    setShowPicker(false);
+  };
+
+  // Rentang Masehi bulan Jawa berjalan (utk sub-header mode jawa)
+  const currentCells = calendarDays.filter((c) => c.isCurrentMonth);
+  const formatMasehiRange = (a, b) => {
+    const awal = `${a.getDate()} ${MONTH_SHORT[a.getMonth()]}`;
+    const akhir = `${b.getDate()} ${MONTH_SHORT[b.getMonth()]} ${b.getFullYear()}`;
+    return a.getFullYear() === b.getFullYear() ? `${awal} – ${akhir}` : `${awal} ${a.getFullYear()} – ${akhir}`;
   };
 
   const isToday = (date) => {
@@ -69,6 +137,11 @@ export default function CalendarScreen() {
     if (!item.isCurrentMonth) return;
     setSelectedDay(item);
   };
+
+  // Halaman Cek Nasib per tanggal (gate render lokal, pola GlosariumScreen)
+  if (nasibDate) {
+    return <NasibScreen date={nasibDate} onClose={() => setNasibDate(null)} />;
+  }
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
@@ -137,32 +210,116 @@ export default function CalendarScreen() {
 
         {/* === Kartu Kalender Utama === */}
         <BlurView intensity={30} tint={colors.blurTint} style={[styles.calendarCard, { maxWidth: maxWidth - 30 }]}>
+          {/* Toggle Mode Masehi / Jawa */}
+          <View style={styles.modeToggleRow}>
+            {[{ key: 'masehi', label: 'Masehi' }, { key: 'jawa', label: 'Jawa' }].map((m) => (
+              <TouchableOpacity
+                key={m.key}
+                style={[styles.modeButton, mode === m.key && styles.modeButtonActive]}
+                onPress={() => switchMode(m.key)}
+                activeOpacity={0.7}
+              >
+                <Text style={[styles.modeButtonText, mode === m.key && styles.modeButtonTextActive]}>
+                  {m.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
           {/* Month Navigation */}
           <View style={styles.monthNav}>
             <TouchableOpacity onPress={goToPrevMonth} style={styles.navButton} activeOpacity={0.6}>
               <Ionicons name="chevron-back" size={22} color={colors.secondary} />
             </TouchableOpacity>
-            <View style={styles.monthTextContainer}>
-              <Text style={styles.monthText}>
-                {MONTH_NAMES[currentDate.getMonth()]}
-              </Text>
-              <Text style={styles.yearText}>
-                {currentDate.getFullYear()}
-              </Text>
-              {(() => {
-                const jc = getJavaneseCalendar(new Date(currentDate.getFullYear(), currentDate.getMonth(), 15));
-                return (
-                  <Text style={styles.javaMasaText}>
-                    {jc.bulanJawa} {jc.tahunAJ} AJ
+            <TouchableOpacity style={styles.monthTextContainer} onPress={togglePicker} activeOpacity={0.7}>
+              {mode === 'jawa' ? (
+                <>
+                  <Text style={styles.monthText}>{jawaCal.bulanJawa}</Text>
+                  <Text style={styles.yearText}>{jawaCal.tahunAJ} AJ · {jawaCal.namaWindu}</Text>
+                  {currentCells.length > 0 && (
+                    <Text style={styles.javaMasaText}>
+                      {formatMasehiRange(currentCells[0].date, currentCells[currentCells.length - 1].date)}
+                    </Text>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Text style={styles.monthText}>
+                    {MONTH_NAMES[currentDate.getMonth()]}
                   </Text>
-                );
-              })()}
-            </View>
+                  <Text style={styles.yearText}>
+                    {currentDate.getFullYear()}
+                  </Text>
+                  {(() => {
+                    const jc = getJavaneseCalendar(new Date(currentDate.getFullYear(), currentDate.getMonth(), 15));
+                    return (
+                      <Text style={styles.javaMasaText}>
+                        {jc.bulanJawa} {jc.tahunAJ} AJ
+                      </Text>
+                    );
+                  })()}
+                </>
+              )}
+              <Ionicons
+                name={showPicker ? 'chevron-up' : 'chevron-down'}
+                size={12}
+                color={colors.textLight}
+                style={{ marginTop: 2 }}
+              />
+            </TouchableOpacity>
             <TouchableOpacity onPress={goToNextMonth} style={styles.navButton} activeOpacity={0.6}>
               <Ionicons name="chevron-forward" size={22} color={colors.secondary} />
             </TouchableOpacity>
           </View>
 
+          {showPicker ? (
+            /* === Picker Bulan & Tahun === */
+            <View style={styles.pickerContainer}>
+              <View style={styles.pickerYearRow}>
+                <TouchableOpacity
+                  onPress={() => setPickerYear((y) => Math.max(yearBounds.min, y - 1))}
+                  style={styles.navButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="chevron-back" size={18} color={colors.secondary} />
+                </TouchableOpacity>
+                <Text style={styles.pickerYearText}>
+                  {mode === 'jawa' ? `${pickerYear} AJ` : pickerYear}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setPickerYear((y) => Math.min(yearBounds.max, y + 1))}
+                  style={styles.navButton}
+                  activeOpacity={0.6}
+                >
+                  <Ionicons name="chevron-forward" size={18} color={colors.secondary} />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.pickerMonthGrid}>
+                {(mode === 'jawa' ? BULAN_JAWA : MONTH_SHORT).map((name, i) => {
+                  const isActive =
+                    pickerYear === (mode === 'jawa' ? jawaCal.tahunAJ : currentDate.getFullYear()) &&
+                    i === (mode === 'jawa' ? jawaCal.bulanIndex : currentDate.getMonth());
+                  return (
+                    <TouchableOpacity
+                      key={name}
+                      style={[styles.pickerMonthCell, isActive && styles.pickerMonthCellActive]}
+                      onPress={() => pickMonth(i)}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={[styles.pickerMonthText, isActive && styles.pickerMonthTextActive]}>
+                        {name}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+              <TouchableOpacity style={styles.pickerTodayButton} onPress={goToToday} activeOpacity={0.7}>
+                <Ionicons name="today" size={14} color={colors.secondary} />
+                <Text style={styles.pickerTodayText}>Hari Ini</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
           {/* Days Header */}
           <View style={styles.daysHeaderRow}>
             {DAY_NAMES.map((day, index) => (
@@ -178,7 +335,7 @@ export default function CalendarScreen() {
               const isSunday = item.date.getDay() === 0;
               const todayStatus = isToday(item.date);
               const isSelected = selectedDay && item.isCurrentMonth &&
-                item.date.getDate() === selectedDay.date.getDate();
+                item.date.getTime() === selectedDay.date.getTime();
 
               return (
                 <TouchableOpacity
@@ -206,6 +363,19 @@ export default function CalendarScreen() {
                       {item.day}
                     </Text>
 
+                    {mode === 'jawa' && (
+                      <Text
+                        style={[
+                          styles.masehiText,
+                          !item.isCurrentMonth && styles.disabledText,
+                          todayStatus && { color: '#1A120B' },
+                        ]}
+                        numberOfLines={1}
+                      >
+                        {item.date.getDate()}/{item.date.getMonth() + 1}
+                      </Text>
+                    )}
+
                     <Text
                       style={[
                         styles.pasaranText,
@@ -221,26 +391,55 @@ export default function CalendarScreen() {
               );
             })}
           </Animated.View>
+
+              {mode === 'jawa' && (
+                <Text style={styles.hisabDisclaimer}>
+                  Hisab tabular — bisa selisih ±1 hari dari kalender resmi (rukyat).
+                </Text>
+              )}
+            </>
+          )}
         </BlurView>
 
         {/* === Detail Tanggal yang Dipilih === */}
         {selectedDay && (
           <BlurView intensity={20} tint={colors.blurTint} style={[styles.detailCard, { maxWidth: maxWidth - 30 }]}>
             <View style={styles.detailHeader}>
+              <TouchableOpacity onPress={() => setSelectedDay(null)} style={styles.detailCloseBtn} activeOpacity={0.7}>
+                <Ionicons name="close" size={22} color={colors.textLight} />
+              </TouchableOpacity>
               <Ionicons name="information-circle" size={20} color={colors.secondary} />
               <Text style={styles.detailTitle}>Detail Tanggal</Text>
             </View>
-            <Text style={styles.detailDate}>
-              {selectedDay.day} {MONTH_NAMES[selectedDay.date.getMonth()]} {selectedDay.date.getFullYear()}
-            </Text>
-            {(() => {
-              const sj = getJavaneseCalendar(selectedDay.date);
-              return (
+            {mode === 'jawa' ? (
+              <>
+                {(() => {
+                  const sj = getJavaneseCalendar(selectedDay.date);
+                  return (
+                    <Text style={styles.detailDate}>
+                      {sj.hariJawa} {sj.bulanJawa} {sj.tahunAJ} AJ · {sj.namaWindu}
+                    </Text>
+                  );
+                })()}
                 <Text style={styles.detailJavaDate}>
-                  {sj.hariJawa} {sj.bulanJawa} {sj.tahunAJ} AJ · {sj.namaWindu}
+                  {selectedDay.date.getDate()} {MONTH_NAMES[selectedDay.date.getMonth()]} {selectedDay.date.getFullYear()}
                 </Text>
-              );
-            })()}
+              </>
+            ) : (
+              <>
+                <Text style={styles.detailDate}>
+                  {selectedDay.date.getDate()} {MONTH_NAMES[selectedDay.date.getMonth()]} {selectedDay.date.getFullYear()}
+                </Text>
+                {(() => {
+                  const sj = getJavaneseCalendar(selectedDay.date);
+                  return (
+                    <Text style={styles.detailJavaDate}>
+                      {sj.hariJawa} {sj.bulanJawa} {sj.tahunAJ} AJ · {sj.namaWindu}
+                    </Text>
+                  );
+                })()}
+              </>
+            )}
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Weton</Text>
               <Text style={styles.detailValue}>{selectedDay.javanese.weton}</Text>
@@ -325,6 +524,14 @@ export default function CalendarScreen() {
                 </View>
               );
             })()}
+            <TouchableOpacity
+              style={styles.nasibButton}
+              onPress={() => setNasibDate(selectedDay.date)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="sparkles" size={16} color="#1A120B" style={{ marginRight: 8 }} />
+              <Text style={styles.nasibButtonText}>Cek Nasib Semua Weton di Tanggal Ini</Text>
+            </TouchableOpacity>
           </BlurView>
         )}
 
@@ -492,6 +699,101 @@ const getStyles = (colors) => StyleSheet.create({
     fontWeight: '600',
     marginTop: 2,
     letterSpacing: 0.3,
+  },
+  modeToggleRow: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    borderRadius: 14,
+    padding: 3,
+    marginTop: 8,
+  },
+  modeButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 22,
+    borderRadius: 11,
+  },
+  modeButtonActive: {
+    backgroundColor: 'rgba(212, 175, 55, 0.2)',
+  },
+  modeButtonText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.textLight,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  modeButtonTextActive: {
+    color: colors.secondary,
+  },
+  masehiText: {
+    fontSize: 8,
+    color: colors.textLight,
+    marginTop: 2,
+    fontWeight: '600',
+  },
+  hisabDisclaimer: {
+    fontSize: 10,
+    color: colors.textLight,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 4,
+  },
+
+  /* === Picker Bulan & Tahun === */
+  pickerContainer: {
+    paddingBottom: 8,
+  },
+  pickerYearRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 40,
+  },
+  pickerYearText: {
+    fontSize: 18,
+    fontWeight: '900',
+    color: colors.primary,
+    letterSpacing: 1,
+  },
+  pickerMonthGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  pickerMonthCell: {
+    width: '25%',
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderRadius: 12,
+  },
+  pickerMonthCellActive: {
+    backgroundColor: 'rgba(212, 175, 55, 0.15)',
+  },
+  pickerMonthText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  pickerMonthTextActive: {
+    color: colors.secondary,
+  },
+  pickerTodayButton: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    borderRadius: 12,
+    backgroundColor: 'rgba(212, 175, 55, 0.12)',
+  },
+  pickerTodayText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.secondary,
+    marginLeft: 6,
   },
   daysHeaderRow: {
     flexDirection: 'row',
@@ -691,5 +993,27 @@ const getStyles = (colors) => StyleSheet.create({
     padding: 14,
     borderWidth: 1,
     borderColor: 'rgba(120, 180, 120, 0.2)',
+  },
+  nasibButton: {
+    backgroundColor: colors.secondary,
+    height: 48,
+    borderRadius: 14,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  nasibButtonText: {
+    color: '#1A120B',
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 0.3,
+  },
+  detailCloseBtn: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 4,
+    zIndex: 10,
   },
 });
